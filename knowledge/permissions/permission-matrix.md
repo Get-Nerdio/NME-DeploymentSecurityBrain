@@ -5,7 +5,7 @@ domain: permissions
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes]
+sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune]
 related: [install-time-permissions, runtime-permissions-core, identity-and-rbac, nme-components]
 ---
 
@@ -169,6 +169,31 @@ consent, all read-only. Source: [_meta/sources.md#api-permissions-xlsx] sheet `n
 | `DeviceManagementServiceConfig.Read.All` | Read enrollment/registration details. |
 | `Group.Read.All` | Filter devices/users by group. |
 | `User.Read.All` | Read user properties and related devices. |
+
+**Enable-time requirements** (the admin enabling Intune Insights) — see
+[modules/intune-insights/overview.md](../modules/intune-insights/overview.md):
+`Microsoft.Authorization/roleAssignments/write` (Owner / RBAC Administrator / User Access
+Administrator) **and** `AppRoleAssignment.ReadWrite.All` (Global Admin / Privileged Role Admin) to
+grant the app's managed identity the Graph permissions above. ([_meta/sources.md#insights-intune])
+
+## 7. Real-Time Insights — `nmw-rti-app-*` / `nmw-rti-sql*` (managed identities)
+Real-Time Insights uses **system-assigned managed identities**, not app registrations. Required
+only for the RTI feature (v7.0+). Source: [_meta/sources.md#insights-rti]. Full module page:
+[modules/real-time-insights/overview.md](../modules/real-time-insights/overview.md).
+
+**Enable-time (the admin enabling RTI):**
+| Permission | Why |
+|---|---|
+| `Microsoft.Authorization/roleAssignments/write` (Owner / RBAC Administrator / User Access Administrator) | Create the role assignments below. |
+| `AppRoleAssignment.ReadWrite.All` (Global Admin / Privileged Role Admin) | Grant the `nmw-rti-sql*` managed identity the Graph `Directory.Read.All` permission. |
+
+**Granted to the RTI managed identities after provisioning:**
+| Identity | Role | Scope |
+|---|---|---|
+| `nmw-rti-app-*` | Storage Blob Data Contributor + Storage Table Data Contributor | RTI Storage Account `stnrt*` |
+| `nmw-rti-app-*` | Monitoring Reader | RTI Application Insights `nmw-rti-app-insights-*` |
+| `nmw-rti-app-*` | Log Analytics Reader | RTI Log Analytics Workspace `nmw-rti-law-*` |
+| `nmw-rti-sql*` | Graph `Directory.Read.All` | Tenant |
 
 ---
 

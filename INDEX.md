@@ -47,7 +47,10 @@ How to secure/harden an NME installation.
 - [nme-components.md](knowledge/architecture/nme-components.md) — the moving parts of an NME deployment.
 
 ### Modules — [knowledge/modules/](knowledge/modules/)
-Secondary modules and their permission/footprint notes. *(Expansion slot — Phase 4.)*
+Secondary modules — deployment/security footprint and permissions (permission rows live in the matrix).
+- [user-cost-attribution/overview.md](knowledge/modules/user-cost-attribution/overview.md) — `nmw-ccl-app`; Premium-only; per-user cost reporting.
+- [intune-insights/overview.md](knowledge/modules/intune-insights/overview.md) — `nmw-ii-app`; Intune endpoint analytics (Eido backend); outbound endpoints.
+- [real-time-insights/overview.md](knowledge/modules/real-time-insights/overview.md) — `nmw-rti-app-*`/`nmw-rti-sql*` managed identities; live monitoring.
 
 ## Reference
 - [_meta/sources.md](_meta/sources.md) — provenance ledger (authoritative source URLs).

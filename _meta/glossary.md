@@ -19,8 +19,13 @@ Canonical definitions of terms used across the brain. Link to these rather than 
 - **`nerdio-nmw-app-automation`** — legacy Run-As app for the Automation Account; **deprecated since
   v5.1** in favor of the Automation Account's Managed Identity. Has no API permissions.
 - **`nmw-rest-api-client`** — the REST API client app; holds the custom `RestClient` role.
-- **`nmw-ccl-app`** — the User Cost Attribution app (also a separate App Service).
-- **`nmw-ii-app`** — the Intune Insights app.
+- **`nmw-ccl-app`** — the User Cost Attribution app (also a separate App Service). See [[ucap-overview]].
+- **`nmw-ii-app`** — the Intune Insights app. See [[intune-insights-overview]].
+- **`nmw-rti-app-*` / `nmw-rti-sql*`** — Real-Time Insights **managed identities** (not app
+  registrations). See [[rti-overview]].
+
+## Module backends
+- **Eido** — third-party endpoint-analytics engine behind **Intune Insights** (`eidocentral.eido.cloud`).
 
 ## Permission concepts
 - **Application permission (Graph)** — app-only permission, used **without** a signed-in user.

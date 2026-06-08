@@ -106,8 +106,9 @@ related: [other-id, another-id]
       DNS/peering, architecture), secrets/Key Vault, component pages (App Service, SQL, Key Vault,
       Storage Account), and Entra ID SQL authentication. *Remaining: CIS images/Intune policies
       (source article not yet ingested).*
-- [ ] **Phase 4 — Modules**: dedicated per-module pages (Cost Attribution, Intune Insights, REST,
-      UEM, Windows 365, Copilot) beyond their matrix rows.
+- [~] **Phase 4 — Modules**: done — User Cost Attribution, Intune Insights, Real-Time Insights
+      (deployment/security footprint + permissions; RTI managed identities added to the matrix).
+      *Remaining: REST API, UEM/Intune, Windows 365, Copilot pages if needed.*
 - [ ] **Phase 5 — Packaging**: ship as a Claude Skill; evaluate MCP exposure.
 - [ ] **Phase 6 — Governance cadence**: define review interval; verify all `draft` → `reviewed`
       against NME 8.0; resolve open questions on each page.

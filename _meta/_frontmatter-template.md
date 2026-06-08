@@ -17,7 +17,8 @@ related: [other-id, another-id]
 
 <!--
 Copy this file to create a new knowledge page. Rules:
-- `id` is unique and matches the filename.
+- `id` is globally unique and matches the filename stem — except structural files (e.g. a
+  module's `overview.md`), which keep a unique descriptive `id` instead.
 - Fill `applies_to` with the NME version(s) the facts are valid for.
 - Add every source URL to _meta/sources.md and reference its anchor here.
 - Link this page from INDEX.md and from at least one related page.

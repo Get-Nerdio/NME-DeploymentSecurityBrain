@@ -85,6 +85,26 @@ All dated 2026-05-05.
   Dated 2026-05-29. Convert managed SQL to mixed mode, add NME service principal as `db_owner`,
   update the Key Vault connection string, restrict to Entra-only auth. Verified: 2026-06-08.
 
+## Nerdio — modules
+<a id="ucap-overview"></a>
+- **User cost attribution overview** — `ingest/User cost attribution overview – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-03-22. Premium-only; prerequisites; CCL service-principal permissions; not supported
+  with Split Identity; heartbeat (LAW) data migration. Verified: 2026-06-08.
+<a id="insights-costs"></a>
+- **Insights: Costs and efficiency** — `ingest/Insights: Costs and efficiency – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Surfaces User Cost Attribution (Public Preview) + Operational Efficiency.
+  Verified: 2026-06-08.
+<a id="insights-rti"></a>
+- **Insights: Real-Time** — `ingest/Insights: Real-Time – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Enable-time permissions, `nmw-rti-app-*` / `nmw-rti-sql*` managed-identity
+  grants, resources created, polling/thresholds. Verified: 2026-06-08.
+<a id="insights-intune"></a>
+- **Insights: Intune** — `ingest/Insights: Intune – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Prerequisites, DB/App sizing, **outbound port requirements (Eido backend)**,
+  enable flow + resources. NOTE: its "Minimum Permissions" block appears copy-pasted from RTI
+  (references `nmw-rti-*`); authoritative `nmw-ii-app` permissions are in the workbook
+  ([#api-permissions-xlsx]). Verified: 2026-06-08.
+
 ## Nerdio — code (GitHub)
 <a id="enable-pe-script"></a>
 - **Enable Private Endpoints (Azure runbook)** — `Get-Nerdio/NMW`,
