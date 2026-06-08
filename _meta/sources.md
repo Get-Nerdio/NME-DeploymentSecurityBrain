@@ -59,6 +59,24 @@ shown. Public unless marked otherwise.
   changelog. **v8.0 = Public Preview, release date 2026-06-02; latest GA = v7.7.4 (2026-05-21).**
   Source of the NME 8.0 deltas applied to this brain. Verified: 2026-06-08.
 
+## Nerdio — component hardening (Setup & Settings › Nerdio Components and Customization)
+All dated 2026-05-05.
+<a id="harden-nme"></a>
+- **Harden Nerdio Manager** — `ingest/Harden Nerdio Manager – Nerdio Manager for Enterprise.pdf`.
+  Overview of the four hardening areas + the **Enable Private Endpoints** Azure runbook (params,
+  Hybrid Worker caveat). Verified: 2026-06-08.
+<a id="harden-app-service"></a>
+- **Harden App Service** — `ingest/Harden App Service – Nerdio Manager for Enterprise.pdf`.
+  Default Entra ID auth (MFA + CA), access restrictions, App Service private endpoint, disable
+  FTP, VNet integration. Verified: 2026-06-08.
+<a id="harden-sql"></a>
+- **Harden SQL** — `ingest/Harden SQL – Nerdio Manager for Enterprise.pdf`.
+  TLS + TDE defaults; restrict SQL to App Service outbound IPs; route via VNet service endpoint.
+  Verified: 2026-06-08.
+<a id="harden-storage"></a>
+- **Harden Azure Storage Account** — `ingest/Harden Azure Storage Account – Nerdio Manager for Enterprise.pdf`.
+  VNet integration + storage firewall; FSLogix subnet caveat. Verified: 2026-06-08.
+
 ## Microsoft Learn
 <a id="graph-permissions"></a>
 - **Microsoft Graph permissions reference** — https://learn.microsoft.com/graph/permissions-reference —

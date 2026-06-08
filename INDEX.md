@@ -34,9 +34,12 @@ What permissions are required to install NME and what it uses on an ongoing basi
 ### Hardening — [knowledge/hardening/](knowledge/hardening/)
 How to secure/harden an NME installation.
 - **[hardening-checklist.md](knowledge/hardening/hardening-checklist.md) — actionable index of this domain.**
-- [identity-and-rbac.md](knowledge/hardening/identity-and-rbac.md) — least privilege, roles, accounts.
-- [network-isolation.md](knowledge/hardening/network-isolation.md) — network exposure & segmentation.
-- [secrets-keyvault.md](knowledge/hardening/secrets-keyvault.md) — secrets, certs, Key Vault.
+- [identity-and-rbac.md](knowledge/hardening/identity-and-rbac.md) — least privilege, roles, accounts, **MFA**.
+- [network-isolation.md](knowledge/hardening/network-isolation.md) — network exposure, private endpoints, the Enable Private Endpoints runbook.
+- [secrets-keyvault.md](knowledge/hardening/secrets-keyvault.md) — secrets, certs, Key Vault, encryption.
+- [harden-app-service.md](knowledge/hardening/harden-app-service.md) — access restrictions, private endpoint, disable FTP, VNet integration.
+- [harden-sql.md](knowledge/hardening/harden-sql.md) — TLS/TDE defaults, restrict SQL to VNet or App Service IPs.
+- [harden-storage-account.md](knowledge/hardening/harden-storage-account.md) — VNet integration + storage firewall (FSLogix-safe).
 
 ### Architecture — [knowledge/architecture/](knowledge/architecture/)
 - [nme-components.md](knowledge/architecture/nme-components.md) — the moving parts of an NME deployment.

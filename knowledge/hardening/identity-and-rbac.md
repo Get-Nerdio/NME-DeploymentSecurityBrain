@@ -4,8 +4,8 @@ title: Hardening — Identity & RBAC
 domain: hardening
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
-status: draft
-sources: [_meta/sources.md#security-faq, _meta/sources.md#azure-permissions]
+status: reviewed
+sources: [_meta/sources.md#security-faq, _meta/sources.md#azure-permissions, _meta/sources.md#harden-app-service, _meta/sources.md#release-notes]
 related: [hardening-checklist, runtime-permissions-core, install-time-permissions, permission-matrix]
 ---
 
@@ -45,6 +45,14 @@ The `nerdio-nmw-app` service principal holds **Reader + Backup Reader at subscri
 subscription. ([_meta/sources.md#azure-permissions]) Full matrix:
 [permission-matrix.md](../permissions/permission-matrix.md).
 
+## Console access: enforce MFA
+**Nerdio's recommendation is to enforce MFA for every user with access to the NME console.**
+The NME App Service is the entry point and is protected by **Entra ID authentication, including
+MFA and Conditional Access, by default** — NME hands authentication to Entra and applies whatever
+CA/MFA policies the tenant enforces. ([_meta/sources.md#harden-app-service]) Implement via an
+Entra **Conditional Access policy requiring MFA** targeting the users/groups entitled to NME (and
+the NME enterprise app). This is the single highest-value identity control for console access.
+
 ## Separation of duties
 The **pre-created Entra app** advanced install separates the Entra admin (registers the app,
 grants consent) from the subscription Owner (deploys infrastructure) — useful where one person
@@ -58,9 +66,5 @@ should not hold both. See [deployment-models.md](../installation/deployment-mode
   [secrets-keyvault.md](secrets-keyvault.md). ([_meta/sources.md#release-notes])
 
 ## Open questions
-- **MFA / Conditional Access for admin access** to the NME console is not covered in the ingested
-  sources — capture Nerdio's recommendation (NME inherits Entra CA/MFA since it hands auth to
-  Entra, but a positive recommendation should be documented). *(Page stays `draft` until this and
-  the role-to-capability mapping below are filled.)*
 - Map each NME built-in role (WVD/AVD Admin, Desktop Admin, Help Desk, Reviewer, End-User) to its
   capabilities (the app-role IDs are in [_meta/sources.md#create-entra-app]).

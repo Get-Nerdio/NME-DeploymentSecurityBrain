@@ -4,9 +4,9 @@ title: NME Hardening Checklist
 domain: hardening
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
-status: draft
-sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide]
-related: [identity-and-rbac, network-isolation, secrets-keyvault, install-time-permissions]
+status: reviewed
+sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#harden-nme, _meta/sources.md#harden-app-service, _meta/sources.md#harden-sql, _meta/sources.md#harden-storage]
+related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-service, harden-sql, harden-storage-account, install-time-permissions]
 ---
 
 # NME Hardening Checklist
@@ -18,15 +18,23 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, install-time-p
 - [ ] **Deploy with Private Endpoints** (Secure Deployment — recommended) so NME and its
       dependencies (SQL, Storage, Key Vault, App Service) are not publicly reachable.
       → [network-isolation.md](network-isolation.md)
-- [ ] If deployed without PEs, apply the **hardening runbook** post-deployment (v7.4+ supports
-      hardened deployment of all core modules **without a hybrid worker VM** for scripts <500 KB).
-      → [network-isolation.md](network-isolation.md)
+- [ ] If deployed without PEs, run the **Enable Private Endpoints** runbook post-deployment (v7.4+
+      supports hardened deployment of all core modules **without a hybrid worker VM** for scripts
+      <500 KB). → [network-isolation.md](network-isolation.md)
 - [ ] Leave **"Restrict App Service public access" unselected at install**; restrict later via the
       supported hardening path. → [network-isolation.md](network-isolation.md)
+- [ ] **Harden the App Service:** access restrictions or private endpoint; disable FTP.
+      → [harden-app-service.md](harden-app-service.md)
+- [ ] **Harden SQL:** restrict to VNet (preferred) or App Service outbound IPs; clear "Allow Azure
+      services." → [harden-sql.md](harden-sql.md)
+- [ ] **Harden Storage:** VNet integration + storage firewall; link all session-host subnets for
+      FSLogix. → [harden-storage-account.md](harden-storage-account.md)
 - [ ] Ensure required Microsoft outbound endpoints remain reachable (service tags / private
       endpoints) for licensing, Azure APIs, logging, and session hosts.
 
 ## Identity & least privilege
+- [ ] **Enforce MFA (Conditional Access) for all users with NME console access** — Nerdio's
+      recommendation. → [identity-and-rbac.md](identity-and-rbac.md)
 - [ ] After install, **reduce the installer's subscription role** from Owner to Contributor or
       User Access Administrator; confirm GA/Owner are no longer assigned for ongoing use.
       → [identity-and-rbac.md](identity-and-rbac.md)
@@ -41,8 +49,12 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, install-time-p
 ## Secrets & data
 - [ ] Confirm secrets/tokens are in **Key Vault**, accessed only via **Managed Identity**.
       → [secrets-keyvault.md](secrets-keyvault.md)
-- [ ] Confirm DB encryption at rest (DPS encryption-key storage account) and TLS in transit.
+- [ ] Confirm SQL encryption: **TDE** at rest and **TLS** in transit (both on by default).
+      → [harden-sql.md](harden-sql.md)
+- [ ] Prefer **certificate-based app auth** (NME 8.0 default for new installs).
       → [secrets-keyvault.md](secrets-keyvault.md)
+- [ ] Use **Global Secure Variables** for any sensitive runbook inputs (clear-text variables show
+      in Automation logs). → [network-isolation.md](network-isolation.md)
 
 ## Review & operate
 - [ ] Review the Marketplace deployment via **Review + Create** / downloaded ARM template /
@@ -51,5 +63,5 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, install-time-p
       environments restore via manual .zip push). → [runtime-permissions-core.md](../permissions/runtime-permissions-core.md)
 
 ## Open questions
-- Source docs do not detail **MFA/Conditional Access for admin access** or **explicit SQL
-  hardening** steps — capture Nerdio's current guidance and add dedicated items.
+- Add a **Key Vault** hardening page (the "Harden key vault" Nerdio article is referenced but not
+  yet ingested) and **CIS hardened images / CIS Intune policies** guidance.
