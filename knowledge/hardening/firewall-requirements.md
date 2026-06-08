@@ -5,7 +5,7 @@ domain: hardening
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#vnet-firewall, _meta/sources.md#session-host-outbound]
+sources: [_meta/sources.md#vnet-firewall, _meta/sources.md#session-host-outbound, _meta/sources.md#nme-network-test, _meta/sources.md#test-outbound-avd]
 related: [network-isolation, harden-app-service, harden-storage-account, prerequisites, intune-insights-overview]
 ---
 
@@ -99,7 +99,24 @@ pull from `github.com`, `teams.microsoft.com`, `microsoft.com`, `support.zoom.us
 > hosts (exclude the session-host OU / use a naming-prefix exclusion if a GPO restricts these,
 > since NME's DSC extensions use PowerShell + WinRM).
 
+## Testing connectivity (troubleshooting)
+Two Nerdio tools verify the two egress surfaces above — use them when connectivity is suspect.
+
+- **NME App Service connectivity** → **`NmeNetworkTest.ps1`** ([_meta/sources.md#nme-network-test]).
+  **Recommend this first when troubleshooting App Service connectivity.** Run it from the App
+  Service **Kudu/SCM debug console** (Azure portal → the NME App Service → Development Tools →
+  Advanced Tools → Debug Console → PowerShell). It tests the §1 endpoints plus the auto-detected
+  Key Vault / SQL / DPS storage over local DNS, capturing DNS resolution and TLS certificate
+  details to `NmeNetworkTestOutput.txt`. Optional params: `AdditionalTestUris` (for non-standard
+  app names), `TlsVersion` (default `Tls12`).
+- **AVD session-host connectivity** → the **"Test Outbound Connections from AVD Host"** Azure
+  runbook scripted action ([_meta/sources.md#test-outbound-avd]). Run it from NME against a target
+  host pool / VM; it tests the required AVD endpoints (§2) and the scripted-actions storage
+  account. It executes via `Invoke-AzVMRunCommand`, so it **works even when the scripted-actions
+  storage is unreachable** — useful precisely when egress is broken. Params: `KeyVaultName`,
+  `AzureResourceGroupName`, `AzureVMName`, `TestRequiredAvdUrls` (default `$true`).
+
 ## Related
-Overall network model and the Enable Private Endpoints runbook:
+Overall network model and the private-endpoint enablement methods:
 [network-isolation.md](network-isolation.md). Prerequisites:
 [prerequisites.md](../installation/prerequisites.md).

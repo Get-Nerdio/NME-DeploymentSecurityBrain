@@ -42,8 +42,9 @@ Resource names are customizable at enable time.
   managed identity's `Directory.Read.All`.
 - Data is collected into the customer's own RTI resources (Storage / LAW / App Insights).
 - More frequent polling increases database/storage cost.
-- Hardening: the RTI Key Vault / SQL / App Service / Storage are covered by the **Enable Private
-  Endpoints** runbook — see [network-isolation.md](../../hardening/network-isolation.md).
+- Hardening: the RTI Key Vault / SQL / App Service / Storage can be placed behind **private
+  endpoints** (via install-time Secure Deployment, the Enable Private Endpoints runbook, or manual
+  configuration) — see [network-isolation.md](../../hardening/network-isolation.md) for the methods.
 
 ## Open questions
 - Confirm RTI identity/role grants are unchanged in NME 8.0.
