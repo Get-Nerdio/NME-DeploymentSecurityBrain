@@ -31,6 +31,13 @@ When Private Endpoints are enabled, the app and **all** dependencies are **no lo
 public endpoints** — access is via private IPs on the customer VNet. Install-wizard inputs: VNet,
 subnet for private endpoints, subnet for App Service (VNet integration). ([_meta/sources.md#implementation-guide])
 
+> **The Enable Private Endpoints runbook (below) is only one of these mechanisms — not "how
+> private endpoints work" in NME.** In a given environment, private endpoints may already be in
+> place from the **install-time Secure Deployment** option, from **manual per-component**
+> configuration (the `harden-*` pages), or from a **module/feature's own provisioning**. Don't
+> assume the runbook is the relevant path in every private-endpoint discussion — check how PEs
+> were actually enabled for that environment first.
+
 > **v7.4+:** all core NME modules (UCA, Intune Insights, Private WinGet, Azure
 > Runbooks/Automation, Azure AI Analytics) support hardened deployment with private endpoints
 > **without a hybrid worker VM**, for scripts under 500 KB. ([_meta/sources.md#security-faq])

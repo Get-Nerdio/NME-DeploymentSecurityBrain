@@ -136,7 +136,21 @@ All dated 2026-05-05.
   (https://github.com/Get-Nerdio/NMW/blob/main/scripted-actions/azure-runbooks/Enable%20Private%20Endpoints.ps1).
   Authoritative source for the private-endpoint runbook's parameters and the resulting private
   network architecture. Ingested: 2026-06-08. Public. *(Code on `main` may be ahead of the Help
-  Center article's documented UI.)*
+  Center article's documented UI. This is **one** way private endpoints are enabled — not the only
+  one; e.g. the install-time Secure Deployment option also provisions them — see [#implementation-guide].)*
+<a id="nme-network-test"></a>
+- **NmeNetworkTest.ps1** — `Get-Nerdio/NME-SE`, `NmeNetworkTest.ps1`
+  (https://github.com/Get-Nerdio/NME-SE/blob/main/NmeNetworkTest.ps1). Diagnostic that tests **NME
+  App Service** outbound + dependency connectivity (licensing, Graph/Entra auth, ARM, monitoring
+  APIs, and auto-detected Key Vault / SQL / DPS storage over local DNS). Run from the App Service
+  Kudu/SCM debug console. Ingested: 2026-06-08. Public.
+<a id="test-outbound-avd"></a>
+- **Test Outbound Connections from AVD Host (Azure runbook)** — `Get-Nerdio/NMW`,
+  `scripted-actions/azure-runbooks/Test Outbound Connections from AVD Host.ps1`
+  (https://github.com/Get-Nerdio/NMW/blob/main/scripted-actions/azure-runbooks/Test%20Outbound%20Connections%20from%20AVD%20Host.ps1).
+  NME runbook that tests **AVD session-host** egress to required AVD endpoints + the scripted-actions
+  storage account, via `Invoke-AzVMRunCommand` (bypasses storage so it works during outages).
+  Ingested: 2026-06-08. Public.
 
 ## Microsoft Learn
 <a id="graph-permissions"></a>

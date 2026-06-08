@@ -40,8 +40,9 @@ The `nmw-ccl-app` service principal is granted:
 - **All data stays within your Azure tenant/subscription(s).**
 - Cost source is moving to **Log Analytics heartbeat data** (v6.1+) as Microsoft deprecates the
   Azure consumption details API.
-- Hardening: the CCL Key Vault / App Service / Storage are covered by the **Enable Private
-  Endpoints** runbook — see [network-isolation.md](../../hardening/network-isolation.md).
+- Hardening: the CCL Key Vault / App Service / Storage can be placed behind **private endpoints**
+  (enabled at install via Secure Deployment, the Enable Private Endpoints runbook, or manually) —
+  see [network-isolation.md](../../hardening/network-isolation.md) for the methods.
 
 ## Open questions
 - Confirm the CCL app-registration vs. App Service naming/relationship for NME 8.0 (the workbook

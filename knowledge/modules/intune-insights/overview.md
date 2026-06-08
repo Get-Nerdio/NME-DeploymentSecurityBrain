@@ -52,8 +52,9 @@ data), `*.repexpstorage.blob.core.windows.net` (Intune Report API blobs), `apigt
 egress — see [network-isolation.md](../../hardening/network-isolation.md).
 
 ## Hardening
-Covered by the **Enable Private Endpoints** runbook (its Key Vault / SQL / App Service) — see
-[network-isolation.md](../../hardening/network-isolation.md).
+Its Key Vault / SQL / App Service can be placed behind **private endpoints** (via install-time
+Secure Deployment, the Enable Private Endpoints runbook, or manual configuration) — see
+[network-isolation.md](../../hardening/network-isolation.md) for the methods.
 
 ## Open questions
 - Confirm whether the doc's managed-identity role grants (Storage Blob/Table Data Contributor,
