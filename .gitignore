@@ -1,0 +1,7 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Ingestion staging area — raw source docs (provenance only, not part of the brain).
+# Cataloged in _meta/sources.md; not tracked to keep the repo lean.
+ingest/
