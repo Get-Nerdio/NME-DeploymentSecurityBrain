@@ -56,7 +56,8 @@ If quota is insufficient, raise a Microsoft support ticket for that subscription
   NME. ([_meta/sources.md#install-guide])
 - Outbound internet from session hosts must match Nerdio's required-endpoints list; the NME App
   Service must reach its required external endpoints (relevant with VNet integration/firewalls).
-  See [network-isolation.md](../hardening/network-isolation.md). ([_meta/sources.md#install-prep])
+  Exact endpoints/service tags: [firewall-requirements.md](../hardening/firewall-requirements.md).
+  ([_meta/sources.md#install-prep])
 
 ## Resources NME will deploy
 See [nme-components.md](../architecture/nme-components.md) for the full list (App Service + plan,

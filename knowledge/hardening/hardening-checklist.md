@@ -5,8 +5,8 @@ domain: hardening
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#harden-nme, _meta/sources.md#harden-app-service, _meta/sources.md#harden-sql, _meta/sources.md#harden-storage, _meta/sources.md#harden-keyvault, _meta/sources.md#configure-entra-sql-auth]
-related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-service, harden-sql, harden-key-vault, harden-storage-account, configure-entra-sql-auth, install-time-permissions]
+sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#harden-nme, _meta/sources.md#harden-app-service, _meta/sources.md#harden-sql, _meta/sources.md#harden-storage, _meta/sources.md#harden-keyvault, _meta/sources.md#configure-entra-sql-auth, _meta/sources.md#vnet-firewall, _meta/sources.md#session-host-outbound]
+related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-service, harden-sql, harden-key-vault, harden-storage-account, configure-entra-sql-auth, firewall-requirements, install-time-permissions]
 ---
 
 # NME Hardening Checklist
@@ -31,8 +31,8 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-ser
       Microsoft services bypass. → [harden-key-vault.md](harden-key-vault.md)
 - [ ] **Harden Storage:** VNet integration + storage firewall; link all session-host subnets for
       FSLogix. → [harden-storage-account.md](harden-storage-account.md)
-- [ ] Ensure required Microsoft outbound endpoints remain reachable (service tags / private
-      endpoints) for licensing, Azure APIs, logging, and session hosts.
+- [ ] Allow the required outbound endpoints/service tags for the App Service (VNet-integrated) and
+      AVD session hosts; remove deprecated agent URLs. → [firewall-requirements.md](firewall-requirements.md)
 
 ## Identity & least privilege
 - [ ] **Enforce MFA (Conditional Access) for all users with NME console access** — Nerdio's

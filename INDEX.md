@@ -42,6 +42,7 @@ How to secure/harden an NME installation.
 - [harden-key-vault.md](knowledge/hardening/harden-key-vault.md) — KV firewall + private endpoint, disable public access.
 - [harden-storage-account.md](knowledge/hardening/harden-storage-account.md) — VNet integration + storage firewall (FSLogix-safe).
 - [configure-entra-sql-auth.md](knowledge/hardening/configure-entra-sql-auth.md) — switch SQL from local auth to NME's Entra service principal.
+- [firewall-requirements.md](knowledge/hardening/firewall-requirements.md) — outbound endpoints/service tags for the App Service and AVD session hosts (secure environments).
 
 ### Architecture — [knowledge/architecture/](knowledge/architecture/)
 - [nme-components.md](knowledge/architecture/nme-components.md) — the moving parts of an NME deployment.

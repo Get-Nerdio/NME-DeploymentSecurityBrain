@@ -129,6 +129,8 @@ configured. ([_meta/sources.md#security-faq])
 NME components need outbound to licensing, Azure APIs, and logging; session hosts need outbound for
 broker comms, updates, and Microsoft Store/WinGet. If filtering via firewall/private DNS, keep
 Microsoft services reachable via **private endpoints or Azure service tags**. ([_meta/sources.md#security-faq])
+The **exact endpoints and service tags** for both the NME App Service (VNet-integrated) and AVD
+session hosts are enumerated in **[firewall-requirements.md](firewall-requirements.md)**.
 
 ## Cross-subscription / tenant
 Best practice is **VNet peering**; ExpressRoute/VPN supported (ExpressRoute Authorizations for
@@ -143,6 +145,4 @@ file-storage connectivity. See [nme-components.md](../architecture/nme-component
   module. ([_meta/sources.md#release-notes])
 
 ## Open questions
-- Enumerate the exact required outbound endpoints/service tags (referenced by external doc title
-  in sources, not enumerated here).
 - NME 8.0 is Public Preview (GA is v7.7.4); re-verify at GA.

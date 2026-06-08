@@ -24,11 +24,19 @@ To **propose a correction** without writing the fix, open an issue (or a PR that
 4. Link the new page from [../INDEX.md](../INDEX.md) **and** from at least one related page.
 
 ## Sourcing & accuracy (non-negotiable for security/permissions content)
-- Cite a source for every non-trivial fact. Record the URL in [sources.md](sources.md) and
-  reference its anchor in the page's `sources:` frontmatter.
+- Cite a source for every non-trivial fact. Record it in [sources.md](sources.md) and reference
+  its anchor in the page's `sources:` frontmatter.
 - Prefer official Nerdio and Microsoft Learn documentation.
 - Mark uncertainty explicitly: separate **facts** from **assumptions** and **open questions**.
 - A stale, uncited permissions/hardening answer is worse than none.
+
+### Ingestion provenance (the Nerdio KB is live)
+Source docs come from the Nerdio Help Center (`nmehelp.getnerdio.com`) and are pulled into the
+gitignored `ingest/` staging area, so **[sources.md](sources.md) is the record of what was
+ingested.** Every source entry records the article's own **Dated/Last modified** value *and* an
+**Ingested** date (when we pulled it). **When you re-pull a doc:** bump its `Ingested` date and
+re-verify every page whose `sources:` reference that anchor (a page's `last_reviewed` does not
+move automatically). See the policy block at the top of [sources.md](sources.md).
 
 ## Single source of truth
 - Specific permissions/roles live **only** in
