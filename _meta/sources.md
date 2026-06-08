@@ -76,6 +76,23 @@ All dated 2026-05-05.
 <a id="harden-storage"></a>
 - **Harden Azure Storage Account** — `ingest/Harden Azure Storage Account – Nerdio Manager for Enterprise.pdf`.
   VNet integration + storage firewall; FSLogix subnet caveat. Verified: 2026-06-08.
+<a id="harden-keyvault"></a>
+- **Harden key vault** — `ingest/Harden key vault – Nerdio Manager for Enterprise.pdf`.
+  VNet integration → KV firewall (selected networks) → KV private endpoint → disable public access.
+  Verified: 2026-06-08.
+<a id="configure-entra-sql-auth"></a>
+- **Configure Entra ID SQL Authentication** — `ingest/Configure Entra ID SQL Authentication – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-29. Convert managed SQL to mixed mode, add NME service principal as `db_owner`,
+  update the Key Vault connection string, restrict to Entra-only auth. Verified: 2026-06-08.
+
+## Nerdio — code (GitHub)
+<a id="enable-pe-script"></a>
+- **Enable Private Endpoints (Azure runbook)** — `Get-Nerdio/NMW`,
+  `scripted-actions/azure-runbooks/Enable Private Endpoints.ps1`
+  (https://github.com/Get-Nerdio/NMW/blob/main/scripted-actions/azure-runbooks/Enable%20Private%20Endpoints.ps1).
+  Authoritative source for the private-endpoint runbook's parameters and the resulting private
+  network architecture. Examined: 2026-06-08. Public. *(Code on `main` may be ahead of the Help
+  Center article's documented UI.)*
 
 ## Microsoft Learn
 <a id="graph-permissions"></a>

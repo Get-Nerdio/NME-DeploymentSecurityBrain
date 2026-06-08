@@ -6,7 +6,7 @@ applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
 sources: [_meta/sources.md#harden-sql, _meta/sources.md#harden-nme]
-related: [hardening-checklist, network-isolation, secrets-keyvault, nme-components]
+related: [hardening-checklist, network-isolation, secrets-keyvault, configure-entra-sql-auth, nme-components]
 ---
 
 # Hardening — Azure SQL Database
@@ -45,12 +45,9 @@ Restrict SQL to traffic from a VNet via an Azure SQL **service endpoint**. ([_me
 Only traffic from your VNet's service endpoint can reach the database.
 
 ## Related
-- Entra ID SQL authentication is a separate enhancement ("Configure Entra ID SQL Authentication" —
-  not yet ingested; tracked below).
+- **Entra ID SQL authentication** (switch from local SQL auth to NME's service principal):
+  [configure-entra-sql-auth.md](configure-entra-sql-auth.md).
 - The SQL connection string is stored in Key Vault — see
   [secrets-keyvault.md](secrets-keyvault.md).
 - For the all-in-one scripted approach, see the Enable Private Endpoints runbook in
   [network-isolation.md](network-isolation.md).
-
-## Open questions
-- Capture **Entra ID SQL Authentication** steps (referenced Nerdio article not yet in `ingest/`).

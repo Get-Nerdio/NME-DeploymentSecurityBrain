@@ -5,7 +5,7 @@ domain: hardening
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#release-notes, _meta/sources.md#harden-nme]
+sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#release-notes, _meta/sources.md#harden-nme, _meta/sources.md#enable-pe-script]
 related: [hardening-checklist, nme-components, secrets-keyvault, harden-app-service, harden-sql, harden-storage-account]
 ---
 
@@ -37,31 +37,77 @@ subnet for private endpoints, subnet for App Service (VNet integration). ([_meta
 
 ### The "Enable Private Endpoints" Azure runbook
 The scripted hardening (model 2) is the **Enable Private Endpoints** runbook under **Scripted
-Actions → Azure runbooks**. It adds private/service endpoints so the App Service reaches **SQL and
-Key Vault over a private network** (no public-internet traffic). Optional parameters
-([_meta/sources.md#harden-nme]):
-- **PeerVnetId** — Resource ID of an existing VNet to peer to the new private-endpoint VNet.
-  Nerdio **recommends against peering to production networks** in hardened scenarios unless storage
-  access is restricted or the app service is made private.
-- **StorageAccountResource** — a single storage account (an Azure Files location) to include in the
-  private-endpoint subnet; access becomes restricted to NME and peered VNets.
-- **MakeAppServicePrivate** — `true` limits app access to hosts on the script's VNet or peered VNets.
+Actions → Azure runbooks**. It builds a dedicated private network and routes NME's PaaS traffic
+through private endpoints — no public internet. The script is authoritative for current behavior
+([_meta/sources.md#enable-pe-script]); the Help Center article shows a simpler UI subset
+([_meta/sources.md#harden-nme]).
 
-Requirements: an App Service Plan tier supporting **VNet integration**, and a VNet with **outbound
-HTTPS (TCP/443)** to Nerdio licensing servers.
+**What it private-endpoints** (GroupId in parens): primary **SQL Server** (`sqlserver`), NME
+**Key Vault** (`vault`), the NME and the **Scripted Actions Automation Accounts**
+(`DSCAndHybridWorker`), and the **App Service** (`sites`). Conditionally, for components that
+exist: **Cost Attribution (CCL)**, **Intune Insights**, and **Real-Time Insights** (their Key
+Vault / SQL / App Service / Storage), the **DPS storage account**, the scripted-actions storage
+(if made private), and an **Azure Monitor Private Link Scope** (optional).
 
-> **Hybrid Worker caveat:** if the storage account holding **scripted actions** is made private,
-> Azure runbook scripted actions stop working — use the **Hybrid Worker** option, with the Hybrid
-> Worker VM on a VNet (peered or the private-endpoint VNet) that can reach that storage account.
-> ([_meta/sources.md#harden-nme])
+**Key parameters** (script defaults):
+| Parameter | Default | Behavior |
+|---|---|---|
+| `PrivateLinkVnetName` | `nmw-private-vnet` | VNet created (or reused) for the private network. |
+| `VnetAddressRange` | `10.250.250.0/23` | New VNet address space. |
+| `PrivateEndpointSubnetName` / `...Range` | `nmw-privateendpoints-subnet` / `10.250.250.0/24` | Subnet hosting the private endpoints (service endpoints enabled). |
+| `AppServiceSubnetName` / `...Range` | `nmw-app-subnet` / `10.250.251.0/28` | Subnet delegated to `Microsoft.Web/serverFarms` for App Service VNet integration. |
+| `PeerVnetIds` | _(empty)_ | Comma-separated VNet IDs, or `All` to peer all linked networks. Peering is bidirectional, same subscription only. |
+| `MakeAppServicePrivate` | `false` | `true` ⇒ App Service public access disabled — reachable only from the script's VNet or peered VNets. |
+| `MakeSaStoragePrivate` | `false` | `true` ⇒ restrict the scripted-actions storage to the private network (**AVD hosts need it — peer the AVD VNets**). |
+| `SkipDNS` / `ExistingDNSZonesRG` | `false` / _(empty)_ | Skip private-DNS-zone creation, or use pre-existing zones in a given RG. |
 
-> **Sensitive values:** runbook variables in clear text appear in Azure Automation logs — use
+**Firewall changes:** Key Vault → `PublicNetworkAccess = Disabled`, default action `Deny`, bypass
+`None`, VNet rule for the PE subnet. SQL → `PublicNetworkAccess = Disabled` with a VNet rule
+(relies on the private endpoint + deny-public rather than IP firewall rules). Both applied to
+component KVs/SQL servers too.
+
+**Private DNS zones** created and linked to the VNet (and to peer VNets where needed):
+`privatelink.vaultcore.azure.net`, `privatelink.database.windows.net`,
+`privatelink.blob.core.windows.net`, `privatelink.azure-automation.net`,
+`privatelink.azurewebsites.net` (plus Azure Monitor zones if enabled). Gov cloud uses `.us`
+equivalents.
+
+**App Service:** VNet-integrated into the app subnet (`vnetRouteAllEnabled = false`, so not all
+outbound is forced through the VNet); stays public unless `MakeAppServicePrivate = true` (the CCL
+component app is set private when present).
+
+> **Prerequisites:** the target resource group / VNet must be **linked in NME → Settings → Azure
+> Environment**; using `ExistingDNSZonesRG` in another subscription requires that subscription
+> linked (NME may need a temporary **Private DNS Zone Contributor** assignment). App Service Plan
+> tier must support VNet integration; the VNet needs outbound **HTTPS 443** to Nerdio licensing.
+> **Re-entrancy:** if the App Service restarts within ~10 min of completion, the script detects
+> the prior run and exits to avoid re-applying. ([_meta/sources.md#enable-pe-script])
+
+> **Hybrid Worker caveat:** if the **scripted-actions** storage is made private, runbook scripted
+> actions stop working unless you use the **Hybrid Worker** option, with the Hybrid Worker VM on a
+> VNet (peered or the PE VNet) that can reach that storage. ([_meta/sources.md#harden-nme])
+
+> **Sensitive values:** clear-text runbook variables appear in Azure Automation logs — use
 > **Global Secure Variables** for secrets. ([_meta/sources.md#harden-nme])
+
+### Resulting private architecture
+```
+Private Link VNet  (nmw-private-vnet, 10.250.250.0/23)
+├─ PE subnet (10.250.250.0/24)  ── private endpoints:
+│     SQL · Key Vault · Automation (NME + scripted-actions) · App Service
+│     · [CCL/Intune Insights/RTI] · [DPS + scripted-actions storage]
+│     service endpoints: Microsoft.KeyVault, .Sql, .Web (+ .Storage)
+└─ App subnet (10.250.251.0/28, delegated Microsoft.Web/serverFarms)
+      └─ NME App Service (VNet integration)
+Private DNS zones (vault / database / blob / automation / azurewebsites)
+      └─ linked to the VNet  ── optional bidirectional peering ──▶ AVD / peer VNets
+KV & SQL: public network access = Disabled (private endpoint only)
+```
 
 ### Manual per-component hardening
 Instead of (or alongside) the script, harden each component manually:
 [harden-app-service.md](harden-app-service.md) · [harden-sql.md](harden-sql.md) ·
-[harden-storage-account.md](harden-storage-account.md).
+[harden-key-vault.md](harden-key-vault.md) · [harden-storage-account.md](harden-storage-account.md).
 
 ## Install-time pitfall
 **Leave "Restrict App Service public access" UNSELECTED during install** — enabling it makes NME

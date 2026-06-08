@@ -101,10 +101,11 @@ related: [other-id, another-id]
       RBAC), install-time, runtime-core — seeded from the API-permissions workbook + Azure
       Permissions doc. *(status: draft — pending NME 8.0 release-note verification.)*
 - [x] **Phase 2 — Installation**: prerequisites, deployment models, step-by-step, validation.
-- [x] **Phase 3 — Hardening**: checklist, identity/RBAC (incl. MFA), network isolation (+ Enable
-      Private Endpoints runbook), secrets/Key Vault, and component pages (App Service, SQL, Storage
-      Account). *Remaining: a Key Vault hardening page and CIS images/Intune policies (source
-      articles not yet ingested).*
+- [x] **Phase 3 — Hardening**: checklist, identity/RBAC (incl. MFA), network isolation (+ the
+      Enable Private Endpoints runbook documented from the actual script: params, resources, VNet/
+      DNS/peering, architecture), secrets/Key Vault, component pages (App Service, SQL, Key Vault,
+      Storage Account), and Entra ID SQL authentication. *Remaining: CIS images/Intune policies
+      (source article not yet ingested).*
 - [ ] **Phase 4 — Modules**: dedicated per-module pages (Cost Attribution, Intune Insights, REST,
       UEM, Windows 365, Copilot) beyond their matrix rows.
 - [ ] **Phase 5 — Packaging**: ship as a Claude Skill; evaluate MCP exposure.

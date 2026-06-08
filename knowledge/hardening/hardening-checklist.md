@@ -5,8 +5,8 @@ domain: hardening
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#harden-nme, _meta/sources.md#harden-app-service, _meta/sources.md#harden-sql, _meta/sources.md#harden-storage]
-related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-service, harden-sql, harden-storage-account, install-time-permissions]
+sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#harden-nme, _meta/sources.md#harden-app-service, _meta/sources.md#harden-sql, _meta/sources.md#harden-storage, _meta/sources.md#harden-keyvault, _meta/sources.md#configure-entra-sql-auth]
+related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-service, harden-sql, harden-key-vault, harden-storage-account, configure-entra-sql-auth, install-time-permissions]
 ---
 
 # NME Hardening Checklist
@@ -27,6 +27,8 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-ser
       → [harden-app-service.md](harden-app-service.md)
 - [ ] **Harden SQL:** restrict to VNet (preferred) or App Service outbound IPs; clear "Allow Azure
       services." → [harden-sql.md](harden-sql.md)
+- [ ] **Harden Key Vault:** firewall to VNet, private endpoint, disable public access + trusted
+      Microsoft services bypass. → [harden-key-vault.md](harden-key-vault.md)
 - [ ] **Harden Storage:** VNet integration + storage firewall; link all session-host subnets for
       FSLogix. → [harden-storage-account.md](harden-storage-account.md)
 - [ ] Ensure required Microsoft outbound endpoints remain reachable (service tags / private
@@ -55,6 +57,8 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-ser
       → [secrets-keyvault.md](secrets-keyvault.md)
 - [ ] Use **Global Secure Variables** for any sensitive runbook inputs (clear-text variables show
       in Automation logs). → [network-isolation.md](network-isolation.md)
+- [ ] (If policy requires) switch SQL to **Entra ID authentication** via NME's service principal.
+      → [configure-entra-sql-auth.md](configure-entra-sql-auth.md)
 
 ## Review & operate
 - [ ] Review the Marketplace deployment via **Review + Create** / downloaded ARM template /
@@ -63,5 +67,5 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-ser
       environments restore via manual .zip push). → [runtime-permissions-core.md](../permissions/runtime-permissions-core.md)
 
 ## Open questions
-- Add a **Key Vault** hardening page (the "Harden key vault" Nerdio article is referenced but not
-  yet ingested) and **CIS hardened images / CIS Intune policies** guidance.
+- Add **CIS hardened images / CIS Intune policies** guidance (Nerdio article referenced but not
+  yet ingested).
