@@ -1,8 +1,8 @@
 # Require review on all knowledge changes before merge.
 # (CODEOWNERS only enforces review if branch protection requiring it is enabled on `main`.)
 
-*                 @drieling-nerdio @SeaneyC
+*                 @drieling-nerdio @SeaneyC @wagnerock
 
 # Permissions and hardening are security-sensitive — same reviewers, called out explicitly.
-/knowledge/permissions/   @drieling-nerdio @SeaneyC
-/knowledge/hardening/     @drieling-nerdio @SeaneyC
+/knowledge/permissions/   @drieling-nerdio @SeaneyC @wagnerock
+/knowledge/hardening/     @drieling-nerdio @SeaneyC @wagnerock
