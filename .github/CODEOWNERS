@@ -1,0 +1,9 @@
+# Require review on all knowledge changes before merge.
+# Replace the placeholder with the real GitHub team or users that own this brain.
+# (CODEOWNERS only enforces review if branch protection requiring it is enabled on `main`.)
+
+*                 @REPLACE-with-team-or-user
+
+# Permissions and hardening are security-sensitive — consider a dedicated reviewer group:
+/knowledge/permissions/   @REPLACE-with-security-reviewers
+/knowledge/hardening/     @REPLACE-with-security-reviewers
