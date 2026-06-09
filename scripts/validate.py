@@ -7,6 +7,10 @@ Checks every knowledge page for:
   - the page being linked from INDEX.md
   - referenced source anchors existing in _meta/sources.md
 
+Checks the source ledger (_meta/sources.md) for:
+  - unique anchor ids
+  - every anchored entry carries an `Ingested: YYYY-MM-DD` date (provenance tracking)
+
 Exit code 0 = clean, 1 = errors. Run: python3 scripts/validate.py
 """
 from __future__ import annotations
@@ -44,11 +48,37 @@ def parse_frontmatter(text: str) -> dict | None:
     return data
 
 
+def validate_sources(sources_text: str) -> tuple[set[str], list[str]]:
+    """Return (anchor ids, errors) for the source ledger.
+
+    Enforces provenance tracking: anchors are unique and every anchored entry records an
+    `Ingested: YYYY-MM-DD` date. (The ledger is the authoritative record of what was ingested,
+    since `ingest/` is gitignored — so a source without an ingestion date is untracked.)
+    """
+    errors: list[str] = []
+    # Split into per-anchor segments: text from each <a id="..."> up to the next anchor.
+    parts = re.split(r'<a id="([^"]+)"></a>', sources_text)
+    # parts = [preamble, id1, body1, id2, body2, ...]
+    anchors: set[str] = set()
+    for i in range(1, len(parts), 2):
+        anchor, body = parts[i], parts[i + 1]
+        if anchor in anchors:
+            errors.append(f"_meta/sources.md: duplicate anchor id '{anchor}'.")
+        anchors.add(anchor)
+        if not re.search(r"Ingested:\s*\d{4}-\d{2}-\d{2}", body):
+            errors.append(
+                f"_meta/sources.md#{anchor}: missing 'Ingested: YYYY-MM-DD' date "
+                f"(every source must record when it was ingested)."
+            )
+    return anchors, errors
+
+
 def main() -> int:
     errors: list[str] = []
     index_text = INDEX.read_text(encoding="utf-8") if INDEX.exists() else ""
     sources_text = SOURCES.read_text(encoding="utf-8") if SOURCES.exists() else ""
-    source_anchors = set(re.findall(r'<a id="([^"]+)">', sources_text))
+    source_anchors, source_errors = validate_sources(sources_text)
+    errors.extend(source_errors)
 
     pages = sorted(KNOWLEDGE.rglob("*.md"))
     if not pages:
@@ -98,7 +128,7 @@ def main() -> int:
             print(f"  - {e}")
         return 1
 
-    print(f"OK: {len(pages)} knowledge page(s) validated.")
+    print(f"OK: {len(pages)} knowledge page(s) and {len(source_anchors)} source(s) validated.")
     return 0
 
 
