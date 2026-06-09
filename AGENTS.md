@@ -28,7 +28,12 @@ a writer: every change must keep the brain internally consistent and verifiable.
    [_meta/_frontmatter-template.md](_meta/_frontmatter-template.md) for a new page).
 3. Update frontmatter: bump `last_reviewed` to today, set `status`
    (`stub`→`draft`→`reviewed`), list `sources` and `related`.
-4. Record any new source URL in [_meta/sources.md](_meta/sources.md) with a dated entry.
+4. **Record provenance.** Add each new/re-pulled doc to [_meta/sources.md](_meta/sources.md) with
+   an `<a id="...">` anchor, its origin (Help Center title/URL), the article's own *Dated/Last
+   modified* value, and an **`Ingested:` date** (today, when you pulled it). The validator
+   **requires** an `Ingested:` date on every anchored entry. If you re-pulled an existing doc,
+   **bump its `Ingested:` date** and re-verify (and bump `last_reviewed` on) every page whose
+   `sources:` cite that anchor.
 5. Ensure the page is linked from [INDEX.md](INDEX.md) **and** at least one related page.
 6. **Validate:** run `python3 scripts/validate.py` and fix every error before proceeding.
 7. **Open a Pull Request** using the template. Summarize what changed and cite sources.
