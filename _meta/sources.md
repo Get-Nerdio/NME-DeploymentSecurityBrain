@@ -138,6 +138,18 @@ All dated 2026-05-05.
   network architecture. Ingested: 2026-06-08. Public. *(Code on `main` may be ahead of the Help
   Center article's documented UI.)*
 
+## Nerdio — Terraform deployment (Private Preview)
+<a id="terraform-repo"></a>
+- **NME Terraform repository** — `Get-Nerdio/NME-Terraform` (snapshot in `ingest/NME-Terraform-main/`).
+  `README.md` is the authoritative (and currently only) documentation; `modules/service/*.tf`
+  inspected for the Entra app, RBAC, automation, and networking specifics. Covers the IaC
+  alternate install path. Ingested: 2026-06-10. Public.
+<a id="terraform-transcript"></a>
+- **"Nerdio under the hood — Terraform" deep-dive (Roan)** — `ingest/roan terraform deep dive.txt`.
+  Internal meeting transcript (2026-06-10): positioning vs Marketplace, Private Preview/MVP status,
+  what it does/doesn't deploy (no secondary modules → state drift), SP creation, vision/no-ETA.
+  Ingested: 2026-06-10. **Internal / non-public.**
+
 ## Microsoft Learn
 <a id="graph-permissions"></a>
 - **Microsoft Graph permissions reference** — https://learn.microsoft.com/graph/permissions-reference —

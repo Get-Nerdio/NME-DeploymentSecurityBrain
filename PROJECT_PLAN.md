@@ -113,6 +113,11 @@ related: [other-id, another-id]
 - [ ] **Phase 6 — Governance cadence**: define review interval; verify all `draft` → `reviewed`
       against NME 8.0; resolve open questions on each page.
 
+- [~] **Alternate install path — Terraform (Private Preview)**: documented as a distinct path
+      alongside Marketplace (`installation/terraform-deployment.md`); deployer-SP permissions and
+      parity with the standard NME app captured. *Remaining: secondary-module support, official KB,
+      Registry module, REST-API integration — all preview/future, no ETA.*
+
 **Baseline version:** NME 8.0. Sources ingested were dated late-2025/early-2026 (version notes
 through ~v7.4); 8.0-specific deltas are tracked as open questions per page.
 
