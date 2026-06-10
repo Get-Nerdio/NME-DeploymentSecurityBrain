@@ -38,6 +38,14 @@ Canonical definitions of terms used across the brain. Link to these rather than 
 - **Runtime permission** — what NME uses on an ongoing basis post-install (largely via Managed
   Identity / its service principal). See [[runtime-permissions-core]].
 
+## Installation paths
+- **Marketplace (standard) install** — deploy from Azure Marketplace + initialize via Cloud Shell;
+  the default path. See [[deployment-models]], [[step-by-step]].
+- **Terraform deployment** — Infrastructure-as-Code alternate install path (**Private Preview**);
+  coexists with Marketplace, doesn't deploy secondary modules yet. See [[terraform-deployment]].
+- **Deployer service principal** — the non-interactive pipeline identity that runs Terraform
+  (distinct from the Marketplace human installer's Global Admin + Owner).
+
 ## Identity / install models
 - **Managed Identity** — Azure-managed service identity NME uses post-install for secure access
   (e.g. Key Vault, Automation Account) without stored credentials.

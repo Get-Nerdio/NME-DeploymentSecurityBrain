@@ -5,14 +5,25 @@ domain: installation
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#install-guide, _meta/sources.md#adv-install, _meta/sources.md#create-entra-app, _meta/sources.md#split-identity, _meta/sources.md#reference-architecture, _meta/sources.md#release-notes]
-related: [prerequisites, step-by-step, nme-components, install-time-permissions]
+sources: [_meta/sources.md#install-guide, _meta/sources.md#adv-install, _meta/sources.md#create-entra-app, _meta/sources.md#split-identity, _meta/sources.md#reference-architecture, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo]
+related: [prerequisites, step-by-step, nme-components, install-time-permissions, terraform-deployment]
 ---
 
 # NME Deployment Models
 
 > Supported installation methods and when to use each. Advanced methods should be used only in
 > special circumstances and with Nerdio Support guidance (nme.support@getnerdio.com).
+
+## Two installation paths (don't conflate)
+NME can be installed via **two distinct paths**. The fundamental requirements for a working install
+are the same, but the procedures are separate — don't mix steps between them.
+
+1. **Azure Marketplace (standard)** — the default path, described on this page (and its advanced
+   variants below). Use for almost all installs.
+2. **Terraform (Infrastructure-as-Code)** — a separate, **Private Preview** path for IaC-oriented
+   orgs. Documented on its own page: **[terraform-deployment.md](terraform-deployment.md)**. It
+   does **not** yet deploy secondary modules. Everything in *this* page's sections refers to the
+   Marketplace path unless stated otherwise.
 
 ## Standard (Azure Marketplace) deploy
 The default, most common path. Deploy from Azure Marketplace, then initialize via **Azure Cloud
@@ -21,6 +32,7 @@ Azure Marketplace. ([_meta/sources.md#install-guide]) Full steps:
 [step-by-step.md](step-by-step.md).
 
 ## Advanced methods
+*(These are variants of the Marketplace/PowerShell path — not the Terraform path.)*
 
 ### 1. Custom Entra ID application name
 Change the default app name `nerdio-nmw-app` to a custom value. **Use when installing multiple NME

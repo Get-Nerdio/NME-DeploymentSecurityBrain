@@ -21,8 +21,9 @@
 ### Installation — [knowledge/installation/](knowledge/installation/)
 How to deploy and install NME.
 - [prerequisites.md](knowledge/installation/prerequisites.md) — what must exist before install.
-- [deployment-models.md](knowledge/installation/deployment-models.md) — supported topologies/options.
-- [step-by-step.md](knowledge/installation/step-by-step.md) — the install procedure.
+- [deployment-models.md](knowledge/installation/deployment-models.md) — the two installation paths + Marketplace topologies/options.
+- [step-by-step.md](knowledge/installation/step-by-step.md) — the Marketplace install procedure.
+- [terraform-deployment.md](knowledge/installation/terraform-deployment.md) — **alternate** Infrastructure-as-Code path (Private Preview).
 - [post-install-validation.md](knowledge/installation/post-install-validation.md) — verify a good install.
 
 ### Permissions — [knowledge/permissions/](knowledge/permissions/)

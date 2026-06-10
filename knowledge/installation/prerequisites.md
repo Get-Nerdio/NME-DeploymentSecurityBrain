@@ -11,8 +11,11 @@ related: [deployment-models, step-by-step, install-time-permissions, nme-compone
 
 # NME Installation Prerequisites
 
-> What must exist before installing NME. Permission specifics are in
-> [install-time-permissions.md](../permissions/install-time-permissions.md).
+> What must exist before installing NME (the **Marketplace** path). Permission specifics are in
+> [install-time-permissions.md](../permissions/install-time-permissions.md). The **Terraform** path
+> has its own tooling/permission prerequisites — see
+> [terraform-deployment.md](terraform-deployment.md). The underlying Azure/Entra requirements for a
+> working install are shared across both paths.
 
 ## Accounts & roles
 The installer needs **Global Administrator** (or **Privileged Role Administrator + Cloud

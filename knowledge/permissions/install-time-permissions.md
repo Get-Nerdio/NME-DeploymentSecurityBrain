@@ -5,8 +5,8 @@ domain: permissions
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#azure-permissions, _meta/sources.md#security-faq, _meta/sources.md#install-guide, _meta/sources.md#release-notes]
-related: [permission-matrix, prerequisites, runtime-permissions-core, identity-and-rbac]
+sources: [_meta/sources.md#azure-permissions, _meta/sources.md#security-faq, _meta/sources.md#install-guide, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo]
+related: [permission-matrix, prerequisites, runtime-permissions-core, identity-and-rbac, terraform-deployment]
 ---
 
 # Install-Time Permissions
@@ -15,8 +15,15 @@ related: [permission-matrix, prerequisites, runtime-permissions-core, identity-a
 > Specific app permission rows live in [permission-matrix.md](permission-matrix.md); this page
 > covers what the **human installer** needs and why it's temporary.
 
+> **Terraform (IaC) path:** when installing via Terraform instead of the Marketplace, the deployer
+> is a non-interactive **pipeline service principal** with a different permission set (subscription
+> Owner *or* Contributor + User Access Administrator; and Graph `Application.ReadWrite.All`,
+> `AppRoleAssignment.ReadWrite.All`, `Directory.Read.All` as Application + `User.Read` delegated) —
+> see [terraform-deployment.md](../installation/terraform-deployment.md). The *resulting* NME app
+> permissions are identical to the standard install ([permission-matrix.md](permission-matrix.md) §1).
+
 ## What the installer needs
-The Entra ID user performing the install requires **both**:
+The Entra ID user performing the install (Marketplace path) requires **both**:
 
 1. **Global Administrator** in Entra ID — *or* the combination **Privileged Role Administrator +
    Cloud Application Administrator**. ([_meta/sources.md#azure-permissions], [_meta/sources.md#install-guide])
