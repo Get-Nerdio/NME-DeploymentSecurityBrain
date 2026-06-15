@@ -5,7 +5,7 @@ domain: permissions
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-15
 status: reviewed
-sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune]
+sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune, _meta/sources.md#nw-se-automation-aa-2026-06-15]
 related: [install-time-permissions, runtime-permissions-core, identity-and-rbac, nme-components]
 ---
 

@@ -5,7 +5,7 @@ domain: architecture
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-15
 status: reviewed
-sources: [_meta/sources.md#reference-architecture, _meta/sources.md#implementation-guide, _meta/sources.md#api-permissions-xlsx, _meta/sources.md#release-notes]
+sources: [_meta/sources.md#reference-architecture, _meta/sources.md#implementation-guide, _meta/sources.md#api-permissions-xlsx, _meta/sources.md#release-notes, _meta/sources.md#nw-se-automation-aa-2026-06-15]
 related: [deployment-models, network-isolation, permission-matrix, runtime-permissions-core]
 ---
 

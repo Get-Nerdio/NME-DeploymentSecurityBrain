@@ -227,6 +227,23 @@ All sourced from the Nerdio Help Center unless marked otherwise.
 - **Azure built-in roles** — https://learn.microsoft.com/azure/role-based-access-control/built-in-roles —
   definitions of Reader, Contributor, Backup Reader, Cost Management Reader, etc. Ingested: 2026-06-08. Public.
 
+## Nerdio — internal SME (verbal / no document)
+Entries in this section have no ingested file. **Dated** = date the information was shared;
+**Ingested** = same date (date recorded here). These are lower-confidence than official docs —
+flag for replacement if a Help Center article or workbook entry is ever published that covers
+the same ground.
+
+<a id="nw-se-automation-aa-2026-06-15"></a>
+- **Nick Wagner, Nerdio SE — verbal clarification (2026-06-15).** Two-automation-account
+  architecture: the **Update AA** uses a system-assigned Managed Identity (replaced the
+  `nerdio-nmw-app-automation` Run-As app at v5.1) and handles NME binary deployments to the
+  App Service. The **Scripted Actions AA** has no Managed Identity; it holds the
+  `nerdio-nmw-app` enterprise app's Key Vault certificate as an Automation Certificate and
+  uses it to authenticate as the `nerdio-nmw-app` service principal. The certificate must not
+  be exported as it is NME's own application identity. Corrects prior conflation of both
+  accounts into one. No document exists; sourced from direct product knowledge.
+  Dated: 2026-06-15. Ingested: 2026-06-15. **Internal.**
+
 ## Notes
 - **Version baseline:** this brain targets **NME 8.0**, which is currently **Public Preview**
   (released 2026-06-02). The latest **GA is v7.7.4**. Most install/permission/hardening
