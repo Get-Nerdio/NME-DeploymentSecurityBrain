@@ -71,6 +71,16 @@ anchor, and reference it from a page's `sources:` frontmatter (e.g. `_meta/sourc
   changelog. **v8.0 = Public Preview, release date 2026-06-02; latest GA = v7.7.4 (2026-05-21).**
   Source of the NME 8.0 deltas applied to this brain. Ingested: 2026-06-08.
 
+## Nerdio — privacy & licensing telemetry
+<a id="customer-data-privacy"></a>
+- **Does Nerdio Manager Store Customer Information?** — `ingest/Does Nerdio Manager Store Customer Information? – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-03-22. Authoritative statement: NME does not collect customer data; Nerdio staff
+  have no access unless granted. Documents the full list of licensing/usage telemetry sent to
+  Nerdio's licensing system (Azure SQL, North Central US, encrypted at rest/in transit): registration
+  info, user/host/CPU counts, host pool names/IDs, cost metrics, feature enablement flags. v5.1+
+  adds feature usage reporting (no PII); opt-out via support. Veracode Verified Standard.
+  Ingested: 2026-06-15.
+
 ## Nerdio — component hardening (Setup & Settings › Nerdio Components and Customization)
 All dated 2026-05-05.
 <a id="harden-nme"></a>
