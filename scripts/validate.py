@@ -24,7 +24,7 @@ INDEX = ROOT / "INDEX.md"
 SOURCES = ROOT / "_meta" / "sources.md"
 
 REQUIRED_KEYS = {"id", "title", "domain", "applies_to", "last_reviewed", "status"}
-VALID_DOMAINS = {"installation", "permissions", "hardening", "architecture", "modules"}
+VALID_DOMAINS = {"installation", "permissions", "hardening", "architecture", "modules", "resilience"}
 VALID_STATUS = {"stub", "draft", "reviewed"}
 
 # Pages that are navigational, not knowledge pages, and so are exempt from frontmatter rules.

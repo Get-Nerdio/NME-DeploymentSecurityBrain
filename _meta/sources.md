@@ -174,6 +174,51 @@ All dated 2026-05-05.
   what it does/doesn't deploy (no secondary modules → state drift), SP creation, vision/no-ETA.
   Ingested: 2026-06-10. **Internal / non-public.**
 
+## Nerdio — resilience & BCDR
+All sourced from the Nerdio Help Center unless marked otherwise.
+<a id="bcdr-avd"></a>
+- **Business continuity and disaster recovery (BCDR) guidance for AVD environments with Nerdio Manager** —
+  `ingest/bcdr-avd-nme.pdf`. Dated 2026-03-22. Architecture guidance for three outage scenarios
+  (local corruption, AZ failure, full region outage); AVD component DR responsibility table; key
+  framing that NME is not in the critical path for user sessions. Ingested: 2026-06-15.
+<a id="nme-ha-dr-webapp"></a>
+- **Configure the Nerdio Manager web app for high availability (HA) or disaster recovery (DR) scenarios** —
+  `ingest/nme-ha-dr-webapp.pdf`. Dated 2026-05-05. Covers all four NME protection layers; the
+  `configure_resilience.ps1` script; limitations table; Known Issues (AFD propagation, AADSTS50011).
+  Important caveat: "As of NME v6.5, HA is supported for the web app layer only … the SQL database
+  layer is classed as a DR invocation action due to the active/passive nature of SQL failover
+  groups." Ingested: 2026-06-15.
+<a id="host-pool-dr-kb"></a>
+- **Host Pool Disaster Recovery** — `ingest/Host Pool Disaster Recovery – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Active-active pooled host pool DR; FSLogix Cloud Cache requirements;
+  configuration walkthrough (Properties → Disaster Recovery); auto-scale integration. Ingested: 2026-06-15.
+<a id="nme-backup-restore-kb"></a>
+- **Back up and restore NME configuration** — `ingest/Back up and restore NME configuration – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Updated strategy (Feb 2025+): three components (KV, SQL, App Service), backup
+  frequencies, custom backup scripts (`app-service-backup.ps1`, `key-vault-backup.ps1`), restore
+  procedures, hardened-env SQL firewall note. Ingested: 2026-06-15.
+<a id="sql-zone-resilient"></a>
+- **Configure SQL database for zone resilient mode** — `ingest/Configure SQL database for zone resilient mode – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-03-22. Upgrade SQL to Premium DTU tier, enable zone redundancy; note that Basic/Standard
+  DTU tiers do not support zone redundancy. Ingested: 2026-06-15.
+<a id="app-zone-resilient"></a>
+- **Configure the application for zone resilient mode** — `ingest/Configure the application for zone resilient mode – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Create ZRS storage + locks container, generate SAS token, add env var or KV
+  secret, create zone-redundant App Service Plan (Premium/Isolated), migrate App Service. Ingested: 2026-06-15.
+<a id="db-resilience-kb"></a>
+- **Configure Nerdio Manager Database Resilience** — `ingest/Configure Nerdio Manager Database Resilience – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Premium-only; two-part procedure: (A) create failover group in NME UI, (B) edit
+  `ConnectionStrings--DefaultConnection` in Key Vault with the failover-group endpoint and restart the
+  App Service. Default failover policy = **Automatic** (auto-failover + auto-failback); can be changed
+  to Manual via Azure portal. Distinguishes Failover (full sync, no data loss) vs Forced Failover
+  (immediate switch, potential data loss). Ingested: 2026-06-15.
+<a id="ha-talking-points"></a>
+- **Nerdio HA/DR TAM Talking Points v3.11** — `ingest/HA_TalkingPoints_v3_11.pdf`. Dated May 2026.
+  Internal TAM guide: all four protection layers with step-by-step walkthroughs, key framing
+  ("NME not in critical path"), failover policy comparison, known issues, Host Pool DR architecture,
+  `configure_resilience.ps1` script deep-dive. **Internal / non-public — Nerdio Confidential,
+  TAM Internal Use.** Ingested: 2026-06-15.
+
 ## Microsoft Learn
 <a id="graph-permissions"></a>
 - **Microsoft Graph permissions reference** — https://learn.microsoft.com/graph/permissions-reference —
