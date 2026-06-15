@@ -5,7 +5,7 @@ domain: resilience
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-15
 status: reviewed
-sources: [_meta/sources.md#ha-talking-points, _meta/sources.md#nme-ha-dr-webapp]
+sources: [_meta/sources.md#db-resilience-kb, _meta/sources.md#nme-ha-dr-webapp, _meta/sources.md#ha-talking-points]
 related: [resilience-overview, nme-zone-resilience, nme-regional-resilience, secrets-keyvault]
 ---
 
@@ -14,7 +14,7 @@ related: [resilience-overview, nme-zone-resilience, nme-regional-resilience, sec
 > **Premium edition only.** Replicates the NME SQL database to a secondary Azure region using an
 > Azure SQL auto-failover group, so a regional SQL outage does not take the NME control plane
 > offline. Must be configured before [Regional Resilience](nme-regional-resilience.md).
-> Sources: [_meta/sources.md#ha-talking-points] (internal), [_meta/sources.md#nme-ha-dr-webapp].
+> Sources: [_meta/sources.md#db-resilience-kb], [_meta/sources.md#nme-ha-dr-webapp].
 
 ## What it does
 
@@ -74,21 +74,25 @@ scheduled actions) also pause. Schedule this outside business hours or in a main
 
 ## Failover policy
 
-Chosen in the Create Failover Group dialog; can be changed afterwards in Azure portal on the
-failover group resource (Configuration → Read/Write failover policy).
+The **default policy is Automatic** — Azure auto-fails over to the secondary when it detects a
+primary outage and auto-fails back when the outage is resolved. To change to Manual, edit the
+configuration from the Azure SQL Failover configuration screen in the Azure portal.
+([_meta/sources.md#db-resilience-kb])
 
 | Policy | Behaviour | When to use |
 |---|---|---|
-| **Customer Managed** (NME default) | Manual failover — a human triggers it from the Azure portal on the failover group resource | Compliance/change-control requirements; concern about false-positive auto-failovers |
-| **Microsoft Managed (Automatic)** | Azure SQL auto-fails over after the primary is unavailable for the configured grace period (min 1 hour, default 1 hour) | RTO < 1 hour; lean ops teams |
+| **Automatic** (NME default) | Azure SQL auto-fails over and auto-fails back; confirm the operation occurred in the Azure portal even on Automatic | Low-ops environments; fastest RTO |
+| **Manual** | A human triggers failover and failback from the Azure portal on the failover group resource | Compliance/change-control requirements; concern about false-positive auto-failovers |
 
-> **Note:** The NME dialog only exposes Customer Managed at creation time. To switch to
-> Automatic, change the policy directly in the Azure portal on the failover group resource after
-> Part A is complete.
+### Manual failover procedure
 
-Automatic failover trade-off: replication is asynchronous, so data committed after the last
-replication cycle may be lost. In-flight NME tasks at the moment of failover may need to be
-retried.
+1. Azure portal → navigate to the Failover group resource.
+2. Select the failover group → choose **Failover** or **Forced Failover**.
+
+| Option | Behaviour | Data loss risk |
+|---|---|---|
+| **Failover** | Full data synchronisation between primary and secondary before the secondary switches to primary role | None (guaranteed) |
+| **Forced Failover** | Immediately switches secondary to primary role without waiting for recent changes to propagate | Possible — changes since last replication cycle may be lost |
 
 ## Nerdio Manager Resilience panel — other fields
 
@@ -97,8 +101,3 @@ retried.
 | Database log retention period | Defaults to Indefinite; cap only if a data-retention policy requires it |
 | Nerdio Manager Regional Resilience | Shows Disabled until [Regional Resilience](nme-regional-resilience.md) is configured |
 
-## Open questions
-
-- The canonical public KB article "Configure Nerdio Manager Database Resilience" (under Setup
-  and Settings › Integrations) has not been ingested. The walkthrough above is sourced from the
-  internal TAM talking-points document. Ingest that KB article to replace or augment this page.

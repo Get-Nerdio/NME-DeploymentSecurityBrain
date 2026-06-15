@@ -205,6 +205,13 @@ All sourced from the Nerdio Help Center unless marked otherwise.
 - **Configure the application for zone resilient mode** — `ingest/Configure the application for zone resilient mode – Nerdio Manager for Enterprise.pdf`.
   Dated 2026-05-05. Create ZRS storage + locks container, generate SAS token, add env var or KV
   secret, create zone-redundant App Service Plan (Premium/Isolated), migrate App Service. Ingested: 2026-06-15.
+<a id="db-resilience-kb"></a>
+- **Configure Nerdio Manager Database Resilience** — `ingest/Configure Nerdio Manager Database Resilience – Nerdio Manager for Enterprise.pdf`.
+  Dated 2026-05-05. Premium-only; two-part procedure: (A) create failover group in NME UI, (B) edit
+  `ConnectionStrings--DefaultConnection` in Key Vault with the failover-group endpoint and restart the
+  App Service. Default failover policy = **Automatic** (auto-failover + auto-failback); can be changed
+  to Manual via Azure portal. Distinguishes Failover (full sync, no data loss) vs Forced Failover
+  (immediate switch, potential data loss). Ingested: 2026-06-15.
 <a id="ha-talking-points"></a>
 - **Nerdio HA/DR TAM Talking Points v3.11** — `ingest/HA_TalkingPoints_v3_11.pdf`. Dated May 2026.
   Internal TAM guide: all four protection layers with step-by-step walkthroughs, key framing
