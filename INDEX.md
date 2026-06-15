@@ -5,7 +5,7 @@
 > this brain is sourced and dated — prefer cited content over inference, and check
 > `last_reviewed` against `applies_to` for the NME version in question.
 
-**Scope:** Nerdio Manager for Enterprise (NME) — installation, hardening, and permissions.
+**Scope:** Nerdio Manager for Enterprise (NME) — installation, hardening, permissions, and resilience/BCDR.
 **Updating the brain (AI agents):** follow [AGENTS.md](AGENTS.md) — the maintenance contract.
 **Updating the brain (humans):** see [_meta/contributing.md](_meta/contributing.md).
 **Architecture & roadmap:** see [PROJECT_PLAN.md](PROJECT_PLAN.md).
@@ -45,6 +45,16 @@ How to secure/harden an NME installation.
 - [configure-entra-sql-auth.md](knowledge/hardening/configure-entra-sql-auth.md) — switch SQL from local auth to NME's Entra service principal.
 - [firewall-requirements.md](knowledge/hardening/firewall-requirements.md) — outbound endpoints/service tags for the App Service and AVD session hosts (secure environments).
 - [customer-data-privacy.md](knowledge/hardening/customer-data-privacy.md) — what NME reports to Nerdio's licensing system; no customer data collected.
+
+### Resilience & BCDR — [knowledge/resilience/](knowledge/resilience/)
+Two independent tracks: NME control-plane HA and session-host/AVD BCDR.
+- **[overview.md](knowledge/resilience/overview.md) — orientation: two tracks, four NME protection layers, three BCDR scenarios. Start here.**
+- [nme-backup-restore.md](knowledge/resilience/nme-backup-restore.md) — App Service, SQL, and Key Vault backup/restore procedures.
+- [nme-zone-resilience.md](knowledge/resilience/nme-zone-resilience.md) — within-region AZ protection: ZRS locks container + zone-redundant App Service Plan + SQL Premium.
+- [nme-database-resilience.md](knowledge/resilience/nme-database-resilience.md) — cross-region SQL auto-failover groups (Premium); two-part config walkthrough and gotchas.
+- [nme-regional-resilience.md](knowledge/resilience/nme-regional-resilience.md) — full multi-region NME web-app HA via `configure_resilience.ps1` + Azure Front Door (Premium).
+- [host-pool-dr.md](knowledge/resilience/host-pool-dr.md) — active-active session-host DR; FSLogix Cloud Cache; per-host-pool configuration (Premium).
+- [avd-bcdr-guidance.md](knowledge/resilience/avd-bcdr-guidance.md) — full AVD BCDR: component DR responsibility table; three outage scenarios.
 
 ### Architecture — [knowledge/architecture/](knowledge/architecture/)
 - [nme-components.md](knowledge/architecture/nme-components.md) — the moving parts of an NME deployment.
