@@ -44,6 +44,7 @@ How to secure/harden an NME installation.
 - [harden-storage-account.md](knowledge/hardening/harden-storage-account.md) — VNet integration + storage firewall (FSLogix-safe).
 - [configure-entra-sql-auth.md](knowledge/hardening/configure-entra-sql-auth.md) — switch SQL from local auth to NME's Entra service principal.
 - [firewall-requirements.md](knowledge/hardening/firewall-requirements.md) — outbound endpoints/service tags for the App Service and AVD session hosts (secure environments).
+- [customer-data-privacy.md](knowledge/hardening/customer-data-privacy.md) — what NME reports to Nerdio's licensing system; no customer data collected.
 
 ### Architecture — [knowledge/architecture/](knowledge/architecture/)
 - [nme-components.md](knowledge/architecture/nme-components.md) — the moving parts of an NME deployment.

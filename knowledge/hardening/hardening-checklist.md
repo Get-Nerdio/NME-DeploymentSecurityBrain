@@ -5,8 +5,8 @@ domain: hardening
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-08
 status: reviewed
-sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#harden-nme, _meta/sources.md#harden-app-service, _meta/sources.md#harden-sql, _meta/sources.md#harden-storage, _meta/sources.md#harden-keyvault, _meta/sources.md#configure-entra-sql-auth, _meta/sources.md#vnet-firewall, _meta/sources.md#session-host-outbound]
-related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-service, harden-sql, harden-key-vault, harden-storage-account, configure-entra-sql-auth, firewall-requirements, install-time-permissions]
+sources: [_meta/sources.md#security-faq, _meta/sources.md#implementation-guide, _meta/sources.md#harden-nme, _meta/sources.md#harden-app-service, _meta/sources.md#harden-sql, _meta/sources.md#harden-storage, _meta/sources.md#harden-keyvault, _meta/sources.md#configure-entra-sql-auth, _meta/sources.md#vnet-firewall, _meta/sources.md#session-host-outbound, _meta/sources.md#customer-data-privacy]
+related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-service, harden-sql, harden-key-vault, harden-storage-account, configure-entra-sql-auth, firewall-requirements, install-time-permissions, customer-data-privacy]
 ---
 
 # NME Hardening Checklist
@@ -49,6 +49,8 @@ related: [identity-and-rbac, network-isolation, secrets-keyvault, harden-app-ser
       roles. → [post-install-validation.md](../installation/post-install-validation.md)
 
 ## Secrets & data
+- [ ] Understand what NME reports to Nerdio's licensing system and confirm no customer data
+      leaves the tenant. → [customer-data-privacy.md](customer-data-privacy.md)
 - [ ] Confirm secrets/tokens are in **Key Vault**, accessed only via **Managed Identity**.
       → [secrets-keyvault.md](secrets-keyvault.md)
 - [ ] Confirm SQL encryption: **TDE** at rest and **TLS** in transit (both on by default).
