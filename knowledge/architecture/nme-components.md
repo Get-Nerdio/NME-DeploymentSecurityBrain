@@ -3,7 +3,7 @@ id: nme-components
 title: NME Components & Architecture
 domain: architecture
 applies_to: "NME 8.0"
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-15
 status: reviewed
 sources: [_meta/sources.md#reference-architecture, _meta/sources.md#implementation-guide, _meta/sources.md#api-permissions-xlsx, _meta/sources.md#release-notes]
 related: [deployment-models, network-isolation, permission-matrix, runtime-permissions-core]
@@ -27,7 +27,8 @@ traffic. ([_meta/sources.md#reference-architecture], [_meta/sources.md#security-
 | **Azure SQL Server + Database** | Application database. Dedicated PaaS instance, default tier **S1**, collation `Latin1_General_CP1_CI_AS`. Sharing the instance or putting the DB in an existing instance is **not supported**. |
 | **Key Vault** | Secrets/tokens; encryption keys managed within Key Vault; accessed only via Managed Identity. |
 | **Storage Account(s)** | Transient scripts; temporary VHDs; VM boot diagnostics; **DPS storage account for DB encryption keys** (v5.5+). |
-| **Azure Automation Account** | Manually-triggered NME updates and Azure runbooks/scripted actions. Runbooks run **in the context of the `nerdio-nmw-app` service principal**. Uses the account's **Managed Identity** (Run-As deprecated since v5.1). |
+| **Update Automation Account** | Deploys NME application updates — downloads and applies latest binaries to the App Service when an admin triggers an update. Uses a **system-assigned Managed Identity**. Formerly used the `nerdio-nmw-app-automation` Run-As app (deprecated v5.1). |
+| **Scripted Actions Automation Account** | Executes NME scripted actions and user-defined runbooks against managed Azure resources. **No Managed Identity.** Authenticates as the `nerdio-nmw-app` service principal using an **Automation Certificate** — the same self-signed certificate stored in Key Vault and associated with the `nerdio-nmw-app` enterprise app. The certificate grants it full NME application identity; it must not be exported or shared. |
 | **Application Insights** | Logs exceptions and API utilization. |
 | **Log Analytics workspace(s)** | Host-pool/performance monitoring; tunable retention/sample rate for cost. |
 
@@ -44,12 +45,12 @@ least S3/P2V2. ([_meta/sources.md#reference-architecture])
 - **Private WinGet / Shell App repository** — a Shell App repo creates only an Azure Storage account.
 
 ## Identities
-The five Entra app registrations and the Automation Account Managed Identity are documented in the
+The five Entra app registrations and the Update Automation Account Managed Identity are documented in the
 [glossary](../../_meta/glossary.md) and, with their permissions, in
 [permission-matrix.md](../permissions/permission-matrix.md):
-`nerdio-nmw-app` (primary), `NerdioManagerForWVD-Subscribe` (billing), `nerdio-nmw-app-automation`
-(legacy Run-As, deprecated), `nmw-rest-api-client` (REST), `nmw-ccl-app` (Cost Attribution),
-`nmw-ii-app` (Intune Insights).
+`nerdio-nmw-app` (primary; also the identity used by the Scripted Actions AA via certificate),
+`NerdioManagerForWVD-Subscribe` (billing), `nerdio-nmw-app-automation` (legacy Run-As for Update AA, deprecated v5.1),
+`nmw-rest-api-client` (REST), `nmw-ccl-app` (Cost Attribution), `nmw-ii-app` (Intune Insights).
 
 ## Resource-group topology
 - A **dedicated NME resource group** holds the core components above.
@@ -62,7 +63,7 @@ The five Entra app registrations and the Automation Account Managed Identity are
   account**; scripts/VHDs/boot-diagnostics transit **storage accounts**.
 - NME ↔ **Azure Resource Manager** (VM/resource lifecycle), **AVD/WVD APIs**, **Microsoft Graph**,
   and (when enabled) **Intune/UEM** and **Windows 365**.
-- The **Automation Account** runs runbooks against managed resources as the `nerdio-nmw-app` SP.
+- The **Scripted Actions Automation Account** runs runbooks against managed resources as the `nerdio-nmw-app` SP (via Key Vault certificate). The **Update Automation Account** manages NME application deployments via its Managed Identity.
 - **Multi-subscription/tenant:** orchestrated via API; **direct connectivity required to domain
   and file-share services**; **VNet peering** is the recommended best practice. ([_meta/sources.md#reference-architecture])
 

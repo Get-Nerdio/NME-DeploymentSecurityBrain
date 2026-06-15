@@ -3,7 +3,7 @@ id: permission-matrix
 title: NME Permission Reference Matrix
 domain: permissions
 applies_to: "NME 8.0"
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-15
 status: reviewed
 sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune]
 related: [install-time-permissions, runtime-permissions-core, identity-and-rbac, nme-components]
@@ -128,10 +128,18 @@ Created during subscription activation. Source: [_meta/sources.md#api-permission
 Data shared with Nerdio's licensing service is limited to **tenant ID, subscription ID, and NME
 app registration ID** — no user/VM/session data. ([_meta/sources.md#security-faq])
 
-## 3. `nerdio-nmw-app-automation` — legacy Run-As app
-**No API permissions.** Dedicated Run-As app for the Automation Account, certificate auth only,
-no client secrets. **Deprecated since v5.1** — NME now uses the Automation Account **Managed
-Identity** to apply app-service updates. ([_meta/sources.md#api-permissions-xlsx])
+## 3. `nerdio-nmw-app-automation` — legacy Run-As app (Update AA only)
+**No API permissions.** Formerly the Run-As app for the **Update Automation Account** (NME
+application update deployments), certificate auth only, no client secrets. **Deprecated since
+v5.1** — the Update AA now uses its **system-assigned Managed Identity** instead.
+([_meta/sources.md#api-permissions-xlsx])
+
+> **Scripted Actions AA auth model (separate, current):** The **Scripted Actions Automation
+> Account** has no Managed Identity and did not use `nerdio-nmw-app-automation`. It holds the
+> `nerdio-nmw-app` enterprise app's Key Vault certificate as an **Automation Certificate** and
+> uses it to authenticate directly as the `nerdio-nmw-app` service principal. Because this
+> certificate represents NME's own application identity, it must not be exported or shared with
+> other automation accounts. See [nme-components.md](../architecture/nme-components.md).
 
 ## 4. `nmw-rest-api-client` — REST API client
 | Permission | API | Type | Consent | Why |
