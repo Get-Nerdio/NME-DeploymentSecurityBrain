@@ -11,6 +11,7 @@ Checks the source ledger (_meta/sources.md) for:
   - unique anchor ids
   - every anchored entry carries an `Ingested: YYYY-MM-DD` date (provenance tracking)
   - any `Confidence:` tier is valid, and verbal/SME entries declare one explicitly
+  - version-specific sources (deployment artifacts) declare an `Applies_to:` release line
 
 Exit code 0 = clean, 1 = errors. Run: python3 scripts/validate.py
 """
@@ -33,6 +34,15 @@ VALID_CONFIDENCE = {"authoritative", "corroborated", "reported"}
 # A source entry is "verbal/SME" (no shipped document) if its body trips one of these markers; such
 # entries must declare a Confidence tier explicitly (corroborated or reported).
 VERBAL_MARKERS = re.compile(r"verbal|no document exists|direct product knowledge|\bSME\b", re.I)
+# A source entry is "version-specific" (its facts are tied to one NME release) if it trips one of
+# these markers — deployment artifacts whose behavior changes release to release. Such entries must
+# declare an `Applies_to:` release line so version provenance is explicit (this is the class of
+# error where a 7.7 artifact was mistaken for 8.0).
+VERSION_SPECIFIC_MARKERS = re.compile(
+    r"\bARM (?:deployment )?template\b|\bdeployment template\b|\binstall(?:ation)? script\b"
+    r"|\bdeploy(?:ment)? script\b|\binit script\b|\bTerraform\b",
+    re.I,
+)
 
 # Pages that are navigational, not knowledge pages, and so are exempt from frontmatter rules.
 EXEMPT = {"README.md"}
@@ -95,6 +105,14 @@ def validate_sources(sources_text: str) -> tuple[set[str], list[str]]:
                 f"_meta/sources.md#{anchor}: verbal/SME source must declare an explicit "
                 f"'Confidence: corroborated' or 'Confidence: reported' tier "
                 f"(see the Confidence policy in _meta/sources.md)."
+            )
+
+        # Applies_to: version-specific sources (deployment artifacts) must declare a release line.
+        if not re.search(r"Applies_to:\s*\S", body) and VERSION_SPECIFIC_MARKERS.search(body):
+            errors.append(
+                f"_meta/sources.md#{anchor}: version-specific source (deployment artifact) must "
+                f"declare an 'Applies_to: <release line>' (e.g. 'Applies_to: 7.7') so its version "
+                f"provenance is explicit."
             )
     return anchors, errors
 

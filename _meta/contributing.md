@@ -53,6 +53,12 @@ When you add a fact you learned from a person rather than a document:
 - A `reported` fact is a valid contribution — just don't dress it up as authoritative. Upgrade it
   to `corroborated` when a document later confirms it.
 
+For **version-specific** sources (deployment artifacts — ARM templates, install/deploy scripts,
+Terraform), also declare an **`Applies_to:`** release line in the ledger entry (e.g.
+`Applies_to: 7.7`); the validator requires it. On the page, **scope the fact to that release** and
+add a "re-verify for `<newer>`" note — don't assume an artifact from one NME version still holds in
+the next.
+
 ## Single source of truth
 - Specific permissions/roles live **only** in
   [../knowledge/permissions/permission-matrix.md](../knowledge/permissions/permission-matrix.md).

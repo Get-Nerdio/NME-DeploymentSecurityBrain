@@ -55,10 +55,11 @@ and grants consent. ([_meta/sources.md#security-faq], [_meta/sources.md#create-e
 
 ## App authentication (NME 8.0)
 **New installs use certificate-based authentication for the app registrations by default**,
-replacing client secrets. ([_meta/sources.md#release-notes]) **Caveat:** the observed 8.0.1 install
-script still provisions a **10-year client secret** (used for the SQL connection string) alongside
-the certificate — so "no shared secret to store or rotate" is not literally true for that build.
-See the provenance note in [secrets-keyvault.md](../hardening/secrets-keyvault.md).
+replacing client secrets. ([_meta/sources.md#release-notes]) **Version note:** the ingested
+deployment artifacts are **7.7**, where the install script provisions a **10-year client secret**
+(`AzureAD--ClientSecret`, used for the SQL connection string) — the secret-based model that 8.0
+replaces. Confirm the 8.0 credential against an 8.0 script; see the version note in
+[secrets-keyvault.md](../hardening/secrets-keyvault.md).
 
 ## Configuration-action permissions (signed-in user)
 Certain post-install "linking"/creation actions require the **signed-in user** (not the app) to

@@ -39,7 +39,10 @@ a writer: every change must keep the brain internally consistent and verifiable.
    **bump its `Ingested:` date** and re-verify (and bump `last_reviewed` on) every page whose
    `sources:` cite that anchor. Set a **`Confidence:`** tier on any non-document source (the
    validator requires it for verbal/SME entries; official docs/artifacts default to
-   `authoritative`).
+   `authoritative`). Set an **`Applies_to:`** release line on any **version-specific** source —
+   deployment artifacts (ARM templates, install/deploy scripts, Terraform); the validator requires
+   it for these. **Scope artifact-derived facts to that release** on the page (and note "re-verify
+   for `<newer>`"); never assume a fact from one release carries to another.
 5. Ensure the page is linked from [INDEX.md](INDEX.md) **and** at least one related page.
 6. **Validate:** run `python3 scripts/validate.py` and fix every error before proceeding.
 7. **Open a Pull Request** using the template. Summarize what changed and cite sources.
