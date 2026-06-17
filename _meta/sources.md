@@ -265,6 +265,11 @@ the same ground.
   be exported as it is NME's own application identity. Corrects prior conflation of both
   accounts into one. No document exists; sourced from direct product knowledge.
   Dated: 2026-06-15. Ingested: 2026-06-15. **Internal.**
+  **Corroborated 2026-06-17** by the 8.0.1 ARM template ([#arm-template-80]) and deploy script
+  ([#cloudshell-deploy-script]), which independently show the two accounts and the full cert flow
+  (`nmw-scripted-action-cert` → asset `ScriptedActionRunAsCert` → app KeyCredential). Those
+  artifacts are now the primary citation for these facts on the pages; this entry records the
+  origin/first report.
 
 ## Notes
 - **Version baseline:** this brain targets **NME 8.0**, which is currently **Public Preview**

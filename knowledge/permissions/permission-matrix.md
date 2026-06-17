@@ -153,11 +153,14 @@ v5.1** — the Update AA now uses its **system-assigned Managed Identity** inste
 ([_meta/sources.md#api-permissions-xlsx])
 
 > **Scripted Actions AA auth model (separate, current):** The **Scripted Actions Automation
-> Account** has no Managed Identity and did not use `nerdio-nmw-app-automation`. It holds the
-> `nerdio-nmw-app` enterprise app's Key Vault certificate as an **Automation Certificate** and
-> uses it to authenticate directly as the `nerdio-nmw-app` service principal. Because this
-> certificate represents NME's own application identity, it must not be exported or shared with
-> other automation accounts. See [nme-components.md](../architecture/nme-components.md).
+> Account** has no Managed Identity and did not use `nerdio-nmw-app-automation`. The install
+> script creates a self-signed Key Vault certificate (`nmw-scripted-action-cert`), imports it into
+> this account as the Automation Certificate asset `ScriptedActionRunAsCert`, and adds it as a
+> KeyCredential on the `nerdio-nmw-app` app registration — so the account authenticates directly as
+> the `nerdio-nmw-app` service principal. Because this certificate represents NME's own application
+> identity, it must not be exported or shared with other automation accounts.
+> ([_meta/sources.md#cloudshell-deploy-script], [_meta/sources.md#arm-template-80]; corroborates
+> [_meta/sources.md#nw-se-automation-aa-2026-06-15]) See [nme-components.md](../architecture/nme-components.md).
 
 ## 4. `nmw-rest-api-client` — REST API client
 | Permission | API | Type | Consent | Why |
