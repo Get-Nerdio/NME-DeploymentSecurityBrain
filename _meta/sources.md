@@ -246,26 +246,35 @@ All sourced from the Nerdio Help Center unless marked otherwise.
   definitions of Reader, Contributor, Backup Reader, Cost Management Reader, etc. Ingested: 2026-06-08. Public.
 
 ## Nerdio — deployment artifacts (ARM template & install scripts)
-Primary-source deployment artifacts pulled directly from an NME 8.0.1 Marketplace deployment.
+Primary-source deployment artifacts from the NME **7.7** release line (per Nick Wagner, who
+provided them). Note: the folder name `template-8.0` and an `8.0.1` package reference in the
+install script's `$sourceUri` reflect a lab *app package*, not the version of this tooling.
 These are authoritative for *what is actually deployed* (resource SKUs, security settings, the
 identity/cert/secret setup) and override prose docs where they conflict.
 
-<a id="arm-template-80"></a>
-- **NME 8.0.1 ARM deployment template** — `ingest/template-8.0/template.json` + `parameters.json`
+<a id="arm-template-77"></a>
+- **NME 7.7 ARM deployment template** — `ingest/template-8.0/template.json` + `parameters.json`
   (Bicep-generated). The Marketplace/`Microsoft.Resources/deployments` template that provisions all
-  core NME resources. Authoritative for initial resource **SKUs/sizes**, security properties (TLS,
-  public-network-access, Entra-only SQL auth, resource locks), the **two automation accounts**, the
-  Data Protection key/storage wiring, and the optional private-endpoint topology. Package version
-  **8.0.1**. Ingested: 2026-06-17. (Semi-public: delivered to every customer at deploy time.)
+  core NME resources. Authoritative (for **7.7**) for initial resource **SKUs/sizes**, security
+  properties (TLS, public-network-access, Entra-only SQL auth, resource locks), the **two automation
+  accounts**, the Data Protection key/storage wiring, and the optional private-endpoint topology.
+  **Release line: 7.7** (per Nick Wagner, who provided the files). The `ingest/` directory name
+  (`template-8.0`) and the install script's `$sourceUri` referenced an `8.0.1` *app package* — that
+  was the package being deployed in a lab, not the version of this deployment tooling. **8.0 deltas
+  (e.g. cert-based app auth) are NOT reflected here — re-verify against an 8.0 template.**
+  Ingested: 2026-06-17. (Semi-public: delivered to every customer at deploy time.)
 <a id="cloudshell-deploy-script"></a>
-- **NME 8.0.1 post-deployment init script** — `ingest/cloudshell-deploy.ps1` (the Cloud Shell
+- **NME 7.7 post-deployment init script** — `ingest/cloudshell-deploy.ps1` (the Cloud Shell
   command body), identical in body to `ingest/deploy-custom-app-name/install-az.ps1` and
   `ingest/deploy-precreated-app/install-az.ps1` (verified byte-identical apart from the header
   parameter block + CRLF). Runs after the ARM deploy: creates/updates the Entra app + app roles +
   API permissions, the 10-yr client secret, the scripted-actions certificate, configures SQL
   (Entra admin + SP DB roles), assigns Azure RBAC, sets app settings, and MSDeploy-publishes the
-  app package. Authoritative for the **identity/secret/cert provisioning** and **install
-  sequence**. Ingested: 2026-06-17. **Internal** (contains tenant-specific values in the header).
+  app package. Authoritative (for **7.7**) for the **identity/secret/cert provisioning** and
+  **install sequence**. **Release line: 7.7** (per Nick Wagner); the `$sourceUri` pointed at an
+  `8.0.1` app package deployed in a lab. The **secret-based** app-registration auth here is the 7.7
+  model; 8.0 moves to certificate-based ([#release-notes]) — re-verify against an 8.0 script.
+  Ingested: 2026-06-17. **Internal** (contains tenant-specific values in the header).
 
 ## Nerdio — internal SME (verbal / no document)
 Entries in this section have no ingested file. **Dated** = date the information was shared;
@@ -282,13 +291,13 @@ the same ground.
   uses it to authenticate as the `nerdio-nmw-app` service principal. The certificate must not
   be exported as it is NME's own application identity. Corrects prior conflation of both
   accounts into one. No document exists; sourced from direct product knowledge.
-  **Corroborated 2026-06-17** by the 8.0.1 ARM template ([#arm-template-80]) and deploy script
+  **Corroborated 2026-06-17** by the 7.7 ARM template ([#arm-template-77]) and deploy script
   ([#cloudshell-deploy-script]), which independently show the two accounts and the full cert flow
   (`nmw-scripted-action-cert` → asset `ScriptedActionRunAsCert` → app KeyCredential). Those
   artifacts are now the primary citation for these facts on the pages; this entry records the
   origin/first report.
   Dated: 2026-06-15. Ingested: 2026-06-15. **Confidence: corroborated** (verbal SME, since
-  confirmed by [#arm-template-80] + [#cloudshell-deploy-script]; was `reported` when first added).
+  confirmed by [#arm-template-77] + [#cloudshell-deploy-script]; was `reported` when first added).
   **Internal.**
 
 ## Notes

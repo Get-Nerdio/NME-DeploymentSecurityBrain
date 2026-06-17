@@ -5,7 +5,7 @@ domain: installation
 applies_to: "NME 8.0"
 last_reviewed: 2026-06-17
 status: reviewed
-sources: [_meta/sources.md#install-guide, _meta/sources.md#adv-install, _meta/sources.md#create-entra-app, _meta/sources.md#split-identity, _meta/sources.md#reference-architecture, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo, _meta/sources.md#arm-template-80, _meta/sources.md#cloudshell-deploy-script]
+sources: [_meta/sources.md#install-guide, _meta/sources.md#adv-install, _meta/sources.md#create-entra-app, _meta/sources.md#split-identity, _meta/sources.md#reference-architecture, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo, _meta/sources.md#arm-template-77, _meta/sources.md#cloudshell-deploy-script]
 related: [prerequisites, step-by-step, nme-components, install-time-permissions, terraform-deployment]
 ---
 
@@ -67,7 +67,9 @@ configuration (subscription Owner). ([_meta/sources.md#adv-install], [_meta/sour
   source doc — see [_meta/sources.md#create-entra-app] when documenting this path in depth.
 
 ## How the Marketplace install runs (ARM template + one script)
-The Marketplace path is two stages ([_meta/sources.md#arm-template-80], [_meta/sources.md#cloudshell-deploy-script]):
+*(Mechanics observed from the **7.7** deployment artifacts; the two-stage flow is stable across
+releases, but 8.0 changes the app-registration credential — see [secrets-keyvault.md](../hardening/secrets-keyvault.md).)*
+The Marketplace path is two stages ([_meta/sources.md#arm-template-77], [_meta/sources.md#cloudshell-deploy-script]):
 1. **ARM template** provisions the Azure resources (App Service + plan, SQL, Key Vault, two
    Automation Accounts, two Log Analytics workspaces, App Insights, DPS storage, optional private
    endpoints) and the App Service Managed Identity. See [nme-components.md](../architecture/nme-components.md).
