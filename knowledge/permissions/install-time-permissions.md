@@ -3,9 +3,9 @@ id: install-time-permissions
 title: Install-Time Permissions
 domain: permissions
 applies_to: "NME 8.0"
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-17
 status: reviewed
-sources: [_meta/sources.md#azure-permissions, _meta/sources.md#security-faq, _meta/sources.md#install-guide, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo]
+sources: [_meta/sources.md#azure-permissions, _meta/sources.md#security-faq, _meta/sources.md#install-guide, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo, _meta/sources.md#cloudshell-deploy-script]
 related: [permission-matrix, prerequisites, runtime-permissions-core, identity-and-rbac, terraform-deployment]
 ---
 
@@ -55,8 +55,10 @@ and grants consent. ([_meta/sources.md#security-faq], [_meta/sources.md#create-e
 
 ## App authentication (NME 8.0)
 **New installs use certificate-based authentication for the app registrations by default**,
-replacing client secrets — a more secure default with no shared secret to store or rotate.
-([_meta/sources.md#release-notes]) See [secrets-keyvault.md](../hardening/secrets-keyvault.md).
+replacing client secrets. ([_meta/sources.md#release-notes]) **Caveat:** the observed 8.0.1 install
+script still provisions a **10-year client secret** (used for the SQL connection string) alongside
+the certificate — so "no shared secret to store or rotate" is not literally true for that build.
+See the provenance note in [secrets-keyvault.md](../hardening/secrets-keyvault.md).
 
 ## Configuration-action permissions (signed-in user)
 Certain post-install "linking"/creation actions require the **signed-in user** (not the app) to

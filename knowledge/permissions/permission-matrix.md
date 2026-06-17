@@ -3,9 +3,9 @@ id: permission-matrix
 title: NME Permission Reference Matrix
 domain: permissions
 applies_to: "NME 8.0"
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-17
 status: reviewed
-sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune]
+sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune, _meta/sources.md#nw-se-automation-aa-2026-06-15, _meta/sources.md#arm-template-80, _meta/sources.md#cloudshell-deploy-script, _meta/sources.md#configure-entra-sql-auth]
 related: [install-time-permissions, runtime-permissions-core, identity-and-rbac, nme-components]
 ---
 
@@ -47,6 +47,24 @@ Granted at install; these are how NME orchestrates Azure resources. Source: [_me
 | **Reader** | Subscription | Yes | Read Azure resources NME manages. |
 | **Backup Reader** | Subscription | Yes | Read backup state of managed resources. |
 | **Contributor** | Each managed resource group (NME RG + host-pool/storage RGs) | Yes | Create/manage AVD resources NME provisions. Scoped to managed RGs, not whole subscription. |
+
+> The Update Automation Account's Managed Identity is separately granted **Contributor on the NME
+> App Service** (to deploy application updates). ([_meta/sources.md#arm-template-80])
+
+### 1a-SQL. SQL database roles (contained-DB, not Azure RBAC)
+At install the SP is added to the application database **`FROM EXTERNAL PROVIDER`** with these
+contained-database roles (the installer is set as the SQL **Entra admin**; SQL is **Entra-only
+auth**). Source: [_meta/sources.md#cloudshell-deploy-script].
+
+| DB role | Why |
+|---|---|
+| `db_ddladmin` | Apply schema/migrations on app updates. |
+| `db_datareader` | Read application data. |
+| `db_datawriter` | Write application data. |
+
+> Note: this is the **automated install** grant. The separate **Entra-ID SQL Authentication
+> hardening** flow ([_meta/sources.md#configure-entra-sql-auth]) instead adds the SP as `db_owner`
+> when converting a managed SQL instance to mixed/Entra auth — don't conflate the two.
 
 ### 1b. Core Microsoft Graph + ARM permissions (always required)
 Source: [_meta/sources.md#api-permissions-xlsx] sheet `nerdio-nmw-app`.
@@ -128,10 +146,21 @@ Created during subscription activation. Source: [_meta/sources.md#api-permission
 Data shared with Nerdio's licensing service is limited to **tenant ID, subscription ID, and NME
 app registration ID** — no user/VM/session data. ([_meta/sources.md#security-faq])
 
-## 3. `nerdio-nmw-app-automation` — legacy Run-As app
-**No API permissions.** Dedicated Run-As app for the Automation Account, certificate auth only,
-no client secrets. **Deprecated since v5.1** — NME now uses the Automation Account **Managed
-Identity** to apply app-service updates. ([_meta/sources.md#api-permissions-xlsx])
+## 3. `nerdio-nmw-app-automation` — legacy Run-As app (Update AA only)
+**No API permissions.** Formerly the Run-As app for the **Update Automation Account** (NME
+application update deployments), certificate auth only, no client secrets. **Deprecated since
+v5.1** — the Update AA now uses its **system-assigned Managed Identity** instead.
+([_meta/sources.md#api-permissions-xlsx])
+
+> **Scripted Actions AA auth model (separate, current):** The **Scripted Actions Automation
+> Account** has no Managed Identity and did not use `nerdio-nmw-app-automation`. The install
+> script creates a self-signed Key Vault certificate (`nmw-scripted-action-cert`), imports it into
+> this account as the Automation Certificate asset `ScriptedActionRunAsCert`, and adds it as a
+> KeyCredential on the `nerdio-nmw-app` app registration — so the account authenticates directly as
+> the `nerdio-nmw-app` service principal. Because this certificate represents NME's own application
+> identity, it must not be exported or shared with other automation accounts.
+> ([_meta/sources.md#cloudshell-deploy-script], [_meta/sources.md#arm-template-80]; corroborates
+> [_meta/sources.md#nw-se-automation-aa-2026-06-15]) See [nme-components.md](../architecture/nme-components.md).
 
 ## 4. `nmw-rest-api-client` — REST API client
 | Permission | API | Type | Consent | Why |

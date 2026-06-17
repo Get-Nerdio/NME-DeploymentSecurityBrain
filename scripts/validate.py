@@ -10,6 +10,7 @@ Checks every knowledge page for:
 Checks the source ledger (_meta/sources.md) for:
   - unique anchor ids
   - every anchored entry carries an `Ingested: YYYY-MM-DD` date (provenance tracking)
+  - any `Confidence:` tier is valid, and verbal/SME entries declare one explicitly
 
 Exit code 0 = clean, 1 = errors. Run: python3 scripts/validate.py
 """
@@ -26,6 +27,12 @@ SOURCES = ROOT / "_meta" / "sources.md"
 REQUIRED_KEYS = {"id", "title", "domain", "applies_to", "last_reviewed", "status"}
 VALID_DOMAINS = {"installation", "permissions", "hardening", "architecture", "modules", "resilience"}
 VALID_STATUS = {"stub", "draft", "reviewed"}
+
+# Source-confidence tiers (see the Confidence policy in _meta/sources.md). Omitted => authoritative.
+VALID_CONFIDENCE = {"authoritative", "corroborated", "reported"}
+# A source entry is "verbal/SME" (no shipped document) if its body trips one of these markers; such
+# entries must declare a Confidence tier explicitly (corroborated or reported).
+VERBAL_MARKERS = re.compile(r"verbal|no document exists|direct product knowledge|\bSME\b", re.I)
 
 # Pages that are navigational, not knowledge pages, and so are exempt from frontmatter rules.
 EXEMPT = {"README.md"}
@@ -62,6 +69,9 @@ def validate_sources(sources_text: str) -> tuple[set[str], list[str]]:
     anchors: set[str] = set()
     for i in range(1, len(parts), 2):
         anchor, body = parts[i], parts[i + 1]
+        # An entry's body runs to the next anchor; truncate at the next section heading so a
+        # following section's prose/header (e.g. the "internal SME" heading) doesn't bleed in.
+        body = re.split(r"\n## ", body)[0]
         if anchor in anchors:
             errors.append(f"_meta/sources.md: duplicate anchor id '{anchor}'.")
         anchors.add(anchor)
@@ -69,6 +79,22 @@ def validate_sources(sources_text: str) -> tuple[set[str], list[str]]:
             errors.append(
                 f"_meta/sources.md#{anchor}: missing 'Ingested: YYYY-MM-DD' date "
                 f"(every source must record when it was ingested)."
+            )
+
+        # Confidence tier: if declared, must be valid; verbal/SME sources must declare one.
+        conf_match = re.search(r"Confidence:\s*([A-Za-z]+)", body)
+        if conf_match:
+            tier = conf_match.group(1).lower()
+            if tier not in VALID_CONFIDENCE:
+                errors.append(
+                    f"_meta/sources.md#{anchor}: invalid Confidence '{conf_match.group(1)}' "
+                    f"(use one of: {', '.join(sorted(VALID_CONFIDENCE))})."
+                )
+        elif VERBAL_MARKERS.search(body):
+            errors.append(
+                f"_meta/sources.md#{anchor}: verbal/SME source must declare an explicit "
+                f"'Confidence: corroborated' or 'Confidence: reported' tier "
+                f"(see the Confidence policy in _meta/sources.md)."
             )
     return anchors, errors
 

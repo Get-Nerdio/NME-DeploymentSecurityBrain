@@ -21,6 +21,10 @@ a writer: every change must keep the brain internally consistent and verifiable.
    directories) unless a human explicitly asks. See [PROJECT_PLAN.md](PROJECT_PLAN.md).
 5. **Preserve sourced facts.** Don't delete a cited fact silently; if it's now wrong, update it
    and note the change, or raise it in the PR.
+6. **Track confidence.** Every source declares a tier — `authoritative` (official docs/artifacts),
+   `corroborated` (verbal/SME claim backed by a document), or `reported` (verbal/SME, no document
+   yet). See the Confidence policy in [_meta/sources.md](_meta/sources.md). Never present a
+   `reported` fact with the same certainty as an `authoritative` one.
 
 ## Update workflow (execute every time)
 1. **Never commit to `main`.** Create a branch: `knowledge/<short-topic>`.
@@ -33,12 +37,29 @@ a writer: every change must keep the brain internally consistent and verifiable.
    modified* value, and an **`Ingested:` date** (today, when you pulled it). The validator
    **requires** an `Ingested:` date on every anchored entry. If you re-pulled an existing doc,
    **bump its `Ingested:` date** and re-verify (and bump `last_reviewed` on) every page whose
-   `sources:` cite that anchor.
+   `sources:` cite that anchor. Set a **`Confidence:`** tier on any non-document source (the
+   validator requires it for verbal/SME entries; official docs/artifacts default to
+   `authoritative`).
 5. Ensure the page is linked from [INDEX.md](INDEX.md) **and** at least one related page.
 6. **Validate:** run `python3 scripts/validate.py` and fix every error before proceeding.
 7. **Open a Pull Request** using the template. Summarize what changed and cite sources.
 8. **Do not self-merge.** A human SE (see `.github/CODEOWNERS`) reviews and merges. If you lack
    permission to open a PR, leave the branch and tell the user exactly what you changed.
+
+## Handling human / SME contributions
+When a person (e.g. an SE) gives you a fact, correction, or addition:
+1. **Ask for a corroborating document** — an official Nerdio/Microsoft article, the API workbook,
+   a deployment artifact, or product source. ("Is there a doc or artifact I can cite for this?")
+2. **If they provide one:** record the fact citing the document, tier **`corroborated`**, and cite
+   *both* the SME ledger entry and the document on the page.
+3. **If they cannot (verbal only):** still capture it — add a ledger entry attributed to the named
+   SME (with date), tier **`reported`**, mark it `Internal` if appropriate, and flag the fact
+   inline on the page (Assumptions / "reported, unverified"). Then **flag the verbal contribution
+   in the PR** under "Verbal / uncorroborated contributions" so a reviewer scrutinizes it.
+4. **Never silently upgrade** a `reported` fact to `authoritative`. When a document later confirms
+   it, change the tier to `corroborated`, add the corroborating citation, and note the date.
+5. Treat a corroborated artifact as the **primary** citation when one exists; keep the SME entry as
+   the origin/first report (see `nw-se-automation-aa-2026-06-15` for the pattern).
 
 ## When unsure
 State the uncertainty explicitly in the PR and in the page (Assumptions / Open questions). A

@@ -6,6 +6,17 @@
 ## Sources
 <!-- Link the authoritative source(s) for new/changed facts. Confirm they're in _meta/sources.md. -->
 
+## Provenance & confidence
+<!-- See the Confidence policy in _meta/sources.md: authoritative > corroborated > reported. -->
+- [ ] Every new source in `_meta/sources.md` declares a **`Confidence:`** tier (or is an official doc/artifact → authoritative)
+- [ ] Any fact from a **verbal/SME** contribution either cites a corroborating document (`corroborated`) or is tagged **`reported`** and listed below
+
+### ⚠️ Verbal / uncorroborated contributions (flag for reviewer)
+<!-- List any facts that came from a person without a supporting document. Name the SME, the claim,
+     and whether a corroborating doc was requested. Leave "None" if not applicable. The reviewer
+     should scrutinize these before merge. -->
+None.
+
 ## Definition of done
 - [ ] One concept per file; no procedure/table fragmented across files
 - [ ] Specific permissions/roles live only in `permission-matrix.md` (linked, not restated)
