@@ -17,8 +17,26 @@ anchor, and reference it from a page's `sources:` frontmatter (e.g. `_meta/sourc
   and re-verify every page whose `sources:` reference it.**
 - Public unless marked otherwise.
 
+### Confidence tiers (every entry has one)
+Each source declares a **`Confidence:`** tier so readers and reviewers know how much weight a fact
+carries. When omitted, an entry defaults to **`authoritative`** (the ledger's origin policy is
+"official doc unless marked otherwise"). **Any non-document source — verbal/SME, a meeting, a
+Slack thread — MUST set its tier explicitly**, and the validator enforces this.
+
+| Tier | Meaning | Use for |
+|---|---|---|
+| **`authoritative`** | First-party documentation or shipped artifact. | Official Nerdio/Microsoft docs, the API-permissions workbook, **deployment artifacts** (ARM templates, install scripts), product source/repos. |
+| **`corroborated`** | A verbal/SME claim that is **backed by ≥1 authoritative source**. | An SE's correction that we then confirmed against a doc, artifact, or code. Cite **both** the SME entry and the corroborating source on the page. |
+| **`reported`** | A verbal/SME claim with **no supporting document yet**. Lowest confidence. | A new SE contribution we could not (yet) corroborate. **Flag in the PR**, and flag inline on the page (Assumptions / "reported, unverified"). Aim to upgrade to `corroborated` later. |
+
+**Contributor rule:** when someone gives you a fact, **ask for a corroborating document**. If they
+provide one, record the fact as `corroborated` (citing both). If they cannot, record it as
+`reported`, attribute it to the named SME, and **flag the verbal contribution in the PR for
+reviewer scrutiny**. Never silently promote a `reported` fact to `authoritative`.
+
 > All entries below were ingested **2026-06-08** (current as of that date per the KB). Exact
 > article URLs (KB slugs) are a TODO; the article title + Help Center base identifies each.
+> Entries without an explicit `Confidence:` line are **`authoritative`** (official docs/artifacts).
 
 ## Nerdio — permissions (authoritative)
 <a id="api-permissions-xlsx"></a>
@@ -264,12 +282,14 @@ the same ground.
   uses it to authenticate as the `nerdio-nmw-app` service principal. The certificate must not
   be exported as it is NME's own application identity. Corrects prior conflation of both
   accounts into one. No document exists; sourced from direct product knowledge.
-  Dated: 2026-06-15. Ingested: 2026-06-15. **Internal.**
   **Corroborated 2026-06-17** by the 8.0.1 ARM template ([#arm-template-80]) and deploy script
   ([#cloudshell-deploy-script]), which independently show the two accounts and the full cert flow
   (`nmw-scripted-action-cert` → asset `ScriptedActionRunAsCert` → app KeyCredential). Those
   artifacts are now the primary citation for these facts on the pages; this entry records the
   origin/first report.
+  Dated: 2026-06-15. Ingested: 2026-06-15. **Confidence: corroborated** (verbal SME, since
+  confirmed by [#arm-template-80] + [#cloudshell-deploy-script]; was `reported` when first added).
+  **Internal.**
 
 ## Notes
 - **Version baseline:** this brain targets **NME 8.0**, which is currently **Public Preview**

@@ -38,6 +38,21 @@ ingested.** Every source entry records the article's own **Dated/Last modified**
 re-verify every page whose `sources:` reference that anchor (a page's `last_reviewed` does not
 move automatically). See the policy block at the top of [sources.md](sources.md).
 
+### Source confidence & SME contributions
+Every source in [sources.md](sources.md) carries a **`Confidence:`** tier — `authoritative`
+(official docs/artifacts), `corroborated` (a verbal/SME claim backed by a document), or `reported`
+(verbal/SME, no document yet). See the **Confidence policy** at the top of [sources.md](sources.md).
+
+When you add a fact you learned from a person rather than a document:
+- **Try to cite a document** (official article, API workbook, deployment artifact, product source).
+  With one, record the fact as `corroborated` and cite both.
+- **Without one,** attribute it to yourself/the SME by name, tier it `reported`, flag the
+  uncertainty inline on the page, and **list it in the PR** under *Verbal / uncorroborated
+  contributions* so a reviewer can scrutinize it. The validator will reject a verbal/SME ledger
+  entry that doesn't declare a tier.
+- A `reported` fact is a valid contribution — just don't dress it up as authoritative. Upgrade it
+  to `corroborated` when a document later confirms it.
+
 ## Single source of truth
 - Specific permissions/roles live **only** in
   [../knowledge/permissions/permission-matrix.md](../knowledge/permissions/permission-matrix.md).
