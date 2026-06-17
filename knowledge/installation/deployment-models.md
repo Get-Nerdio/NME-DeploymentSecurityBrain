@@ -3,9 +3,9 @@ id: deployment-models
 title: NME Deployment Models
 domain: installation
 applies_to: "NME 8.0"
-last_reviewed: 2026-06-08
+last_reviewed: 2026-06-17
 status: reviewed
-sources: [_meta/sources.md#install-guide, _meta/sources.md#adv-install, _meta/sources.md#create-entra-app, _meta/sources.md#split-identity, _meta/sources.md#reference-architecture, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo]
+sources: [_meta/sources.md#install-guide, _meta/sources.md#adv-install, _meta/sources.md#create-entra-app, _meta/sources.md#split-identity, _meta/sources.md#reference-architecture, _meta/sources.md#release-notes, _meta/sources.md#terraform-repo, _meta/sources.md#arm-template-80, _meta/sources.md#cloudshell-deploy-script]
 related: [prerequisites, step-by-step, nme-components, install-time-permissions, terraform-deployment]
 ---
 
@@ -65,6 +65,27 @@ configuration (subscription Owner). ([_meta/sources.md#adv-install], [_meta/sour
 - Completion uses **local PowerShell** (`deploy-az.ps1`; **cannot use Cloud Shell**).
 - Entra app technical details (app roles, redirect URIs, exact permission set) are captured in the
   source doc — see [_meta/sources.md#create-entra-app] when documenting this path in depth.
+
+## How the Marketplace install runs (ARM template + one script)
+The Marketplace path is two stages ([_meta/sources.md#arm-template-80], [_meta/sources.md#cloudshell-deploy-script]):
+1. **ARM template** provisions the Azure resources (App Service + plan, SQL, Key Vault, two
+   Automation Accounts, two Log Analytics workspaces, App Insights, DPS storage, optional private
+   endpoints) and the App Service Managed Identity. See [nme-components.md](../architecture/nme-components.md).
+2. **Post-deployment PowerShell script** does everything identity- and app-related: creates/updates
+   the `nerdio-nmw-app` registration, its **app roles** (Reviewer, Help Desk, End-user, Desktop
+   Admin, WVD Admin, Rest client) and API permissions; creates the client secret and the
+   scripted-actions certificate; configures SQL (sets the installer as Entra admin, creates the SP
+   DB user with `db_ddladmin`/`db_datareader`/`db_datawriter`); assigns Azure RBAC
+   (Reader + Backup Reader on the subscription, Contributor on the RG); writes app settings; and
+   MSDeploy-publishes the application package.
+
+> **One script, three entry points.** The Cloud Shell command, the **custom-app-name** download,
+> and the **pre-created-app** download run a **byte-identical script body** — they differ only in
+> the header parameters. The custom path sets `$appName`; the pre-created path sets `$appId` +
+> `$appSecret` + `$servicePrincipalObjectId` (which makes the script *use* the existing app and
+> **skip** app/role/permission/cert-as-KeyCredential creation) instead of creating a new app. So
+> "Download script (Az)" (`install-az.ps1`) is the same logic as Cloud Shell, just run locally.
+> ([_meta/sources.md#cloudshell-deploy-script])
 
 ## Deployment scenarios (independent of method)
 NME supports **single-subscription**, **multi-subscription**, and **multi-tenant** deployments

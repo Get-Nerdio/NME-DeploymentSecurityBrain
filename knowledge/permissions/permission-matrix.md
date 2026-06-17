@@ -3,9 +3,9 @@ id: permission-matrix
 title: NME Permission Reference Matrix
 domain: permissions
 applies_to: "NME 8.0"
-last_reviewed: 2026-06-15
+last_reviewed: 2026-06-17
 status: reviewed
-sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune, _meta/sources.md#nw-se-automation-aa-2026-06-15]
+sources: [_meta/sources.md#api-permissions-xlsx, _meta/sources.md#azure-permissions, _meta/sources.md#graph-permissions, _meta/sources.md#azure-rbac, _meta/sources.md#release-notes, _meta/sources.md#insights-rti, _meta/sources.md#insights-intune, _meta/sources.md#nw-se-automation-aa-2026-06-15, _meta/sources.md#arm-template-80, _meta/sources.md#cloudshell-deploy-script, _meta/sources.md#configure-entra-sql-auth]
 related: [install-time-permissions, runtime-permissions-core, identity-and-rbac, nme-components]
 ---
 
@@ -47,6 +47,24 @@ Granted at install; these are how NME orchestrates Azure resources. Source: [_me
 | **Reader** | Subscription | Yes | Read Azure resources NME manages. |
 | **Backup Reader** | Subscription | Yes | Read backup state of managed resources. |
 | **Contributor** | Each managed resource group (NME RG + host-pool/storage RGs) | Yes | Create/manage AVD resources NME provisions. Scoped to managed RGs, not whole subscription. |
+
+> The Update Automation Account's Managed Identity is separately granted **Contributor on the NME
+> App Service** (to deploy application updates). ([_meta/sources.md#arm-template-80])
+
+### 1a-SQL. SQL database roles (contained-DB, not Azure RBAC)
+At install the SP is added to the application database **`FROM EXTERNAL PROVIDER`** with these
+contained-database roles (the installer is set as the SQL **Entra admin**; SQL is **Entra-only
+auth**). Source: [_meta/sources.md#cloudshell-deploy-script].
+
+| DB role | Why |
+|---|---|
+| `db_ddladmin` | Apply schema/migrations on app updates. |
+| `db_datareader` | Read application data. |
+| `db_datawriter` | Write application data. |
+
+> Note: this is the **automated install** grant. The separate **Entra-ID SQL Authentication
+> hardening** flow ([_meta/sources.md#configure-entra-sql-auth]) instead adds the SP as `db_owner`
+> when converting a managed SQL instance to mixed/Entra auth — don't conflate the two.
 
 ### 1b. Core Microsoft Graph + ARM permissions (always required)
 Source: [_meta/sources.md#api-permissions-xlsx] sheet `nerdio-nmw-app`.
