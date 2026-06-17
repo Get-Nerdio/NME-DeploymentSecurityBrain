@@ -10,6 +10,7 @@
 <!-- See the Confidence policy in _meta/sources.md: authoritative > corroborated > reported. -->
 - [ ] Every new source in `_meta/sources.md` declares a **`Confidence:`** tier (or is an official doc/artifact → authoritative)
 - [ ] Any fact from a **verbal/SME** contribution either cites a corroborating document (`corroborated`) or is tagged **`reported`** and listed below
+- [ ] Version-specific sources (deployment artifacts) declare an **`Applies_to:`** release line, and artifact-derived facts are **scoped to that release** on the page (with a re-verify note for newer versions)
 
 ### ⚠️ Verbal / uncorroborated contributions (flag for reviewer)
 <!-- List any facts that came from a person without a supporting document. Name the SME, the claim,

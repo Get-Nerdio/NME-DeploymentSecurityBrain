@@ -34,6 +34,17 @@ provide one, record the fact as `corroborated` (citing both). If they cannot, re
 `reported`, attribute it to the named SME, and **flag the verbal contribution in the PR for
 reviewer scrutiny**. Never silently promote a `reported` fact to `authoritative`.
 
+### Release-line provenance (`Applies_to:`)
+A source whose facts are **tied to a specific NME release** — deployment artifacts (ARM templates,
+install/deploy scripts, Terraform) and version-stamped behavior — **MUST declare an `Applies_to:`
+line** stating the release line it describes (e.g. `Applies_to: 7.7`, `Applies_to: 8.0`,
+`Applies_to: Private Preview`). The validator enforces this for artifact-type sources. This makes
+version provenance first-class alongside `Ingested:` and `Confidence:`, so a fact from one release
+is never silently applied to another (the mistake that turned a 7.7 template into "8.0"). Version-
+agnostic docs (most KB articles) may omit it. **When a page states an artifact-derived fact, scope
+it to that release** and add a "re-verify for `<newer>`" note rather than assuming it carries
+forward.
+
 > All entries below were ingested **2026-06-08** (current as of that date per the KB). Exact
 > article URLs (KB slugs) are a TODO; the article title + Help Center base identifies each.
 > Entries without an explicit `Confidence:` line are **`authoritative`** (official docs/artifacts).
@@ -185,12 +196,12 @@ All dated 2026-05-05.
 - **NME Terraform repository** — `Get-Nerdio/NME-Terraform` (snapshot in `ingest/NME-Terraform-main/`).
   `README.md` is the authoritative (and currently only) documentation; `modules/service/*.tf`
   inspected for the Entra app, RBAC, automation, and networking specifics. Covers the IaC
-  alternate install path. Ingested: 2026-06-10. Public.
+  alternate install path. Applies_to: Private Preview (no version GA). Ingested: 2026-06-10. Public.
 <a id="terraform-transcript"></a>
 - **"Nerdio under the hood — Terraform" deep-dive (Roan)** — `ingest/roan terraform deep dive.txt`.
   Internal meeting transcript (2026-06-10): positioning vs Marketplace, Private Preview/MVP status,
   what it does/doesn't deploy (no secondary modules → state drift), SP creation, vision/no-ETA.
-  Ingested: 2026-06-10. **Internal / non-public.**
+  Applies_to: Private Preview (no version GA). Ingested: 2026-06-10. **Internal / non-public.**
 
 ## Nerdio — resilience & BCDR
 All sourced from the Nerdio Help Center unless marked otherwise.
@@ -262,7 +273,7 @@ identity/cert/secret setup) and override prose docs where they conflict.
   (`template-8.0`) and the install script's `$sourceUri` referenced an `8.0.1` *app package* — that
   was the package being deployed in a lab, not the version of this deployment tooling. **8.0 deltas
   (e.g. cert-based app auth) are NOT reflected here — re-verify against an 8.0 template.**
-  Ingested: 2026-06-17. (Semi-public: delivered to every customer at deploy time.)
+  Applies_to: 7.7. Ingested: 2026-06-17. (Semi-public: delivered to every customer at deploy time.)
 <a id="cloudshell-deploy-script"></a>
 - **NME 7.7 post-deployment init script** — `ingest/cloudshell-deploy.ps1` (the Cloud Shell
   command body), identical in body to `ingest/deploy-custom-app-name/install-az.ps1` and
@@ -274,7 +285,7 @@ identity/cert/secret setup) and override prose docs where they conflict.
   **install sequence**. **Release line: 7.7** (per Nick Wagner); the `$sourceUri` pointed at an
   `8.0.1` app package deployed in a lab. The **secret-based** app-registration auth here is the 7.7
   model; 8.0 moves to certificate-based ([#release-notes]) — re-verify against an 8.0 script.
-  Ingested: 2026-06-17. **Internal** (contains tenant-specific values in the header).
+  Applies_to: 7.7. Ingested: 2026-06-17. **Internal** (contains tenant-specific values in the header).
 
 ## Nerdio — internal SME (verbal / no document)
 Entries in this section have no ingested file. **Dated** = date the information was shared;
@@ -298,7 +309,8 @@ the same ground.
   origin/first report.
   Dated: 2026-06-15. Ingested: 2026-06-15. **Confidence: corroborated** (verbal SME, since
   confirmed by [#arm-template-77] + [#cloudshell-deploy-script]; was `reported` when first added).
-  **Internal.**
+  Applies_to: 7.7+ (two-AA architecture holds across releases; 8.0 changes the app-registration
+  credential — see [secrets-keyvault](../knowledge/hardening/secrets-keyvault.md)). **Internal.**
 
 ## Notes
 - **Version baseline:** this brain targets **NME 8.0**, which is currently **Public Preview**
